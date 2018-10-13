@@ -197,14 +197,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        // check email address
+        //TODO: Replace this with your own logic
 
-        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        return email.matches(regex);
+        return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        // check email password
+        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -356,5 +355,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
-}
 
+
+}
