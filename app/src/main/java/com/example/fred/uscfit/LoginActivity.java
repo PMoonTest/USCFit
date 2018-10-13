@@ -194,8 +194,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        DBController db = new DBController();
-        db.add();
+
+
         return email.contains("@");
     }
 
@@ -328,6 +328,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
             // TODO: register the new account here.
+            DBController db = new DBController();
+            db.addNewUser(mEmail, mPassword);
             return true;
         }
 

@@ -58,4 +58,25 @@ public class DBController {
                     }
                 });
     }
+    public void addNewUser(String email, String password){
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        newUser.put("password", password);
+
+
+        db.collection("Users").document(email)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
 }
