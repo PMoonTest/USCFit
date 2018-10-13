@@ -195,7 +195,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         DBController db = new DBController();
-        db.test();
+        db.add();
         return email.contains("@");
     }
 
