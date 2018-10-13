@@ -29,6 +29,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.db.DBController;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,6 +194,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
+        DBController db = new DBController();
+        db.test();
         return email.contains("@");
     }
 
