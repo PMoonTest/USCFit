@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "38326320542",
+    "firebase_url": "https://uscfit-d58d6.firebaseio.com",
+    "project_id": "uscfit-d58d6",
+    "storage_bucket": "uscfit-d58d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38326320542:android:b1a10541f63aee9b",
+        "android_client_info": {
+          "package_name": "com.example.fred.uscfit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "38326320542-so64mkkfrpfbg56mi8oaav0lasuulvre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUrhB7CvUzICD5Lxn3Rj-8gH5ospIGNEs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
