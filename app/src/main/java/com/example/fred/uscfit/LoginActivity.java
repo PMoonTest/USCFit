@@ -3,21 +3,19 @@ package com.example.fred.uscfit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,6 +28,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.db.DBController;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -332,7 +332,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // TODO: register the new account here.
             DBController db = new DBController();
-            db.addNewUser(mEmail, mPassword);
+            // Create a reference to the cities collection
+            CollectionReference usersRef = db.db.collection("Users");
+
+            // Create a query against the collection.
+            Query query = usersRef.whereEqualTo("email", mEmail);
+            if(query.get().getResult() == null || query.get().getResult().size() == 0){
+                db.addNewUser(mEmail, mPassword);
+            }
+            else{
+                if(query.get().getResult().getDocuments().get(0).get("password") == mPassword){
+
+                }else{
+                    mPasswordView.setError(getString(R.string.error_invalid_password));
+//                    cancel = true;
+//                    focusView = mPasswordView;
+                }
+            }
+
+
             return true;
         }
 
