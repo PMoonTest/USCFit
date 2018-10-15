@@ -27,9 +27,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.User;
 import com.example.db.DBController;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,24 +49,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
+    //private List<User> mUsers = new ArrayList<>();
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
+    public static boolean login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -315,43 +312,65 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
-            DBController db = new DBController();
+            final DBController db = new DBController();
             // Create a reference to the cities collection
             CollectionReference usersRef = db.db.collection("Users");
 
             // Create a query against the collection.
             Query query = usersRef.whereEqualTo("email", mEmail);
-            if(query.get().getResult() == null || query.get().getResult().size() == 0){
-                db.addNewUser(mEmail, mPassword);
-            }
-            else{
-                if(query.get().getResult().getDocuments().get(0).get("password") == mPassword){
+            //List<User> users = new ArrayList<>();
+            //System.out.println(query.get());
+            //Task<QuerySnapshot> result =  query.get();
+            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    //questionObject content = queryDocumentSnapshots.toObjects(questionObject.class);
+                    List<User> users  = queryDocumentSnapshots.toObjects(User.class);
 
-                }else{
-                    mPasswordView.setError(getString(R.string.error_invalid_password));
-//                    cancel = true;
-//                    focusView = mPasswordView;
+                    if (users.size() == 0){
+                        login = true;
+                        db.addNewUser(mEmail,mPassword);
+
+                    }
+                    else{
+                        if(users.get(0).password.equals(mPassword)){
+                            //next view
+                            login = true;
+                            System.out.println(login+"222");
+
+
+                        }else{
+                            login = false;
+                            System.out.println(login+"222");
+                            //System.out.println("密码错误");
+                        }
+                    }
+
                 }
+            });
+            try {
+                // Simulate network access.
+
+
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                return false;
             }
 
 
-            return true;
+            System.out.println(login + "111");
+           return login;
         }
 
         @Override
