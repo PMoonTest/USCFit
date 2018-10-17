@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -347,12 +348,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         if(users.get(0).password.equals(mPassword)){
                             //next view
                             login = true;
-                            System.out.println(login+"222");
+                            //System.out.println(login+"222");
 
 
                         }else{
                             login = false;
-                            System.out.println(login+"222");
+                            //System.out.println(login+"222");
                             //System.out.println("密码错误");
                         }
                     }
@@ -369,7 +370,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
 
 
-            System.out.println(login + "111");
+            //System.out.println(login + "111");
            return login;
         }
 
@@ -379,7 +380,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent intent = new Intent(LoginActivity.this, FootstepsActivity.class);
+                intent.putExtra("email",mEmail);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
