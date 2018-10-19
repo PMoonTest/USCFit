@@ -31,4 +31,8 @@
     <string name="plan_btn_text">Add Plan</string>
     <string name="sport_btn_text">Add Sport</string>
     <string name="progress_btn_text">Progress</string>
+
+    <string name="title_activity_add_plan">AddPlanActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

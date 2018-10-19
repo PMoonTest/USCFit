@@ -1,12 +1,16 @@
 package com.example.fred.uscfit;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -106,6 +110,21 @@ public class AddPlanActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        // Adding new activities
+        FloatingActionButton addActivityBtn = (FloatingActionButton) findViewById(R.id.addActivityBtn);
+        final Context that = this;
+        addActivityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+                Button btn = new Button(that);
+                btn.setText("Send");
+                btn.setId(new Integer(1));
+
+                layout.addView(btn);
+            }
+        });
     }
 
     @Override
