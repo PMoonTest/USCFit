@@ -26,11 +26,11 @@
     <string name="action_settings">Settings</string>
 
 
-    <!-- Strings related to home  -->
     <string name="footstep_btn_text">FootStep</string>
     <string name="plan_btn_text">Add Plan</string>
     <string name="sport_btn_text">Add Sport</string>
     <string name="progress_btn_text">Progress</string>
+    <string name="activity_btn_text">Add Activity</string>
 
     <string name="title_activity_add_plan">AddPlanActivity</string>
     <string name="title_activity_add_sport">AddSportActivity</string>
