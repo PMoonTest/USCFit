@@ -37,12 +37,15 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".HomeActivity"
-            android:label="Home"
-            >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="Home"></activity>
+        <activity
+            android:name=".AddSportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_add_sport"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>
