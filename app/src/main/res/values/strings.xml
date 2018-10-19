@@ -24,4 +24,11 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+
+    <!-- Strings related to home  -->
+    <string name="footstep_btn_text">FootStep</string>
+    <string name="plan_btn_text">Add Plan</string>
+    <string name="sport_btn_text">Add Sport</string>
+    <string name="progress_btn_text">Progress</string>
 </resources>
