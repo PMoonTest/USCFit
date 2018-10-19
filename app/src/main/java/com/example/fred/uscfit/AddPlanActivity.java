@@ -94,8 +94,8 @@ public class AddPlanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_plan);
 
         mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
+//        mControlsView = findViewById(R.id.fullscreen_content_controls);
+//        mContentView = findViewById(R.id.fullscreen_content);
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -109,7 +109,7 @@ public class AddPlanActivity extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+//        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
         // Adding new activities
         FloatingActionButton addActivityBtn = (FloatingActionButton) findViewById(R.id.addActivityBtn);
@@ -151,7 +151,7 @@ public class AddPlanActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mControlsView.setVisibility(View.GONE);
+//        mControlsView.setVisibility(View.GONE);
         mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay
