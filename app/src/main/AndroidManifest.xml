@@ -42,6 +42,11 @@
             android:name=".HomeActivity"
             android:label="Home"></activity>
         <activity
+            android:name=".AddSportActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_add_sport"
+            android:theme="@style/FullscreenTheme"></activity>
+        <activity
             android:name=".AddPlanActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="AddPlanActivity"

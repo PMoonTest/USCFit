@@ -1,6 +1,7 @@
 package com.example.fred.uscfit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,6 +25,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private Button footStepBtn;
     private SensorManager sensorManager;
     private String mStepNum;
+
+    private Button addSportBtn;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,6 +86,17 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         else{
             Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show();
         }
+
+        // connect add sport button to AddSportActivity
+        addSportBtn = (Button) findViewById(R.id.addSportBtn);
+        addSportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeActivity.this, AddSportActivity.class);
+                intent.putExtra("email", mEmail);
+                startActivity(intent);
+            }
+        });
 
     }
 
