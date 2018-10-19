@@ -380,8 +380,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, FootstepsActivity.class);
-                intent.putExtra("email",mEmail);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.putExtra("email", mEmail);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
