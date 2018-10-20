@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     public static boolean login;
+    public static boolean isComplete = false;
     public final DBController db = new DBController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -346,6 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         login = true;
                         db.addNewUser(mEmail,mPassword);
 
+
                     }
                     else{
                         if(users.get(0).password.equals(mPassword)){
@@ -359,7 +361,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //System.out.println(login+"222");
                             //System.out.println("密码错误");
                         }
+
                     }
+                    isComplete = true;
 
                 }
             });
@@ -367,9 +371,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // Simulate network access.
 
 
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
+            }
+            while(!isComplete){
+
             }
 
 
