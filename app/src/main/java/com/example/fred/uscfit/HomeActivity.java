@@ -26,28 +26,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private String mStepNum;
 
-    private Button addSportBtn;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mWelcomeMessage.setText(R.string.title_home);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mWelcomeMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_notifications:
-                    mWelcomeMessage.setText(R.string.title_notifications);
-                    return true;
-            }
-            return false;
-        }
-    };
-
+    private Button mAddSportBtn;
+    private Button mAddPlanBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +37,9 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         mWelcomeMessage = findViewById(R.id.welcomeMessage);
         String welcomeMessage = "Welcome " + mEmail;
         mWelcomeMessage.setText(welcomeMessage);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //BottomNavigationView navigation = findViewById(R.id.navigation);
+        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         // initialize step coutner
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -88,11 +69,19 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
 
         // connect add sport button to AddSportActivity
-        addSportBtn = (Button) findViewById(R.id.addSportBtn);
-        addSportBtn.setOnClickListener(new View.OnClickListener() {
+        mAddSportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, AddSportActivity.class);
+                intent.putExtra("email", mEmail);
+                startActivity(intent);
+            }
+        });
+
+        mAddPlanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddPlanActivity.class);
                 intent.putExtra("email", mEmail);
                 startActivity(intent);
             }

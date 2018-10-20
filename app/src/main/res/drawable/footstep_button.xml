@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval" >
+    android:shape="rectangle">
 
-    <solid android:color="#FF3F89E7"/>
-    <corners android:radius="10dp"/>
+    <corners android:radius="30dp"/>
 
+    <gradient
+        android:angle="45"
+        android:centerColor="#fff"
+        android:centerX="35%"
+        android:endColor="@color/common_google_signin_btn_text_dark_pressed"
+        android:startColor="#ffffff"
+        android:type="linear" />
 </shape>

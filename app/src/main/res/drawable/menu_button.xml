@@ -2,13 +2,13 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:shape="rectangle" >
-    <corners android:radius="100dp" />
+    <corners android:radius="20dp" />
     <gradient
         android:angle="45"
-        android:centerColor="@color/colorPrimary"
-        android:centerX="35%"
+        android:centerColor="#fff"
+        android:centerX="45%"
         android:endColor="@color/common_google_signin_btn_text_dark_pressed"
-        android:startColor="#E8E8E8"
+        android:startColor="#E4E4E4"
         android:type="linear" />
     <padding
         android:left="0dp"
@@ -21,6 +21,6 @@
         android:height="30dp"
         />
     <stroke
-        android:width="3dp"
+        android:width="0dp"
         android:color="#878787" />
 </shape>
