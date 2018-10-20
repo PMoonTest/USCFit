@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     public static boolean login;
+    public final DBController db = new DBController();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -324,10 +325,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            }
 
             // TODO: register the new account here.
-            final DBController db = new DBController();
+
             // Create a reference to the cities collection
             CollectionReference usersRef = db.db.collection("Users");
 
+            //db.getPlan("siyuanx@usc.edu","MondayPlan");
+            //System.out.println(a.name);
             // Create a query against the collection.
             Query query = usersRef.whereEqualTo("email", mEmail);
             //List<User> users = new ArrayList<>();
