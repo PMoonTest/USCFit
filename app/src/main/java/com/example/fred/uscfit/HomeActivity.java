@@ -7,10 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,6 +34,9 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         mWelcomeMessage = findViewById(R.id.welcomeMessage);
         String welcomeMessage = "Welcome " + mEmail;
         mWelcomeMessage.setText(welcomeMessage);
+
+        mAddSportBtn = (Button) findViewById(R.id.addSportBtn);
+        mAddPlanBtn = (Button) findViewById(R.id.addPlanBtn);
 
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
