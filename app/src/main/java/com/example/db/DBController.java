@@ -29,6 +29,9 @@ import static android.support.constraint.Constraints.TAG;
 public class DBController {
 
     public FirebaseFirestore db = null;
+    public static boolean activityComplete = false;
+    public static boolean SportComplete = false;
+    public static boolean PlanComplete = false;
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -101,7 +104,9 @@ public class DBController {
     public void addSports(String email, Sport _sport){
         db.collection("Users").document(email).collection("Sports").document(_sport.name).set(_sport);
     }
+
     public List<Sport> getAllSports(String email){
+        SportComplete = false;
         db.collection("Users").document(email).collection("Sports")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -114,14 +119,15 @@ public class DBController {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        SportComplete = true;
                     }
                 });
-        try {
-
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            return null;
-        }
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            return null;
+//        }
+        while(!SportComplete){}
         return _sports;
 
     }
@@ -168,6 +174,7 @@ public class DBController {
                 });
     }
     public List<Object> getAllActivity(String email){
+        activityComplete = false;
         final List<Object> allActivities = new ArrayList<>();
         db.collection("Users").document(email).collection("Activities")
                 .get()
@@ -182,14 +189,16 @@ public class DBController {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        activityComplete = true;
                     }
                 });
-        try {
-            // Simulate network access.
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            return null;
-        }
+//        try {
+//            // Simulate network access.
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            return null;
+//        }
+        while(!activityComplete){}
         return allActivities;
     }
     public void addPlan(String email, Plan plan){
@@ -223,6 +232,7 @@ public class DBController {
 
     }
     public Plan getPlan(String email, String planName){
+        PlanComplete = false;
         final Plan a = new Plan();
         DocumentReference docRef = db.collection("Users").document(email).collection("Plans").document(planName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -240,6 +250,7 @@ public class DBController {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                PlanComplete = true;
             }
         });
        a.activity = getAllActivity(email);
@@ -249,6 +260,7 @@ public class DBController {
         } catch (InterruptedException e) {
             return null;
         }
+        while(!PlanComplete){}
         return a;
 
 

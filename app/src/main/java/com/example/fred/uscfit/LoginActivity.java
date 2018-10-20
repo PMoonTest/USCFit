@@ -337,6 +337,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //List<User> users = new ArrayList<>();
             //System.out.println(query.get());
             //Task<QuerySnapshot> result =  query.get();
+            isComplete = false;
             query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
