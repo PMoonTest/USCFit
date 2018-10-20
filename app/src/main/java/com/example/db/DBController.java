@@ -30,7 +30,7 @@ public class DBController {
 
     public FirebaseFirestore db = null;
     public static boolean activityComplete = false;
-    public static boolean SportComplete = false;
+    public volatile boolean SportComplete = false;
     public static boolean PlanComplete = false;
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
