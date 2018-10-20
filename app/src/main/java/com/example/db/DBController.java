@@ -30,7 +30,7 @@ public class DBController {
 
     public FirebaseFirestore db = null;
     public static boolean activityComplete = false;
-    public volatile boolean SportComplete = false;
+    public static boolean SportComplete = false;
     public static boolean PlanComplete = false;
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
@@ -106,6 +106,7 @@ public class DBController {
     }
 
     public List<Sport> getAllSports(String email){
+        //volatile boolean flag = false;
         SportComplete = false;
         db.collection("Users").document(email).collection("Sports")
                 .get()
@@ -122,11 +123,14 @@ public class DBController {
                         SportComplete = true;
                     }
                 });
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            return null;
-//        }
+        try {
+            // Simulate network access.
+
+
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return null;
+        }
         while(!SportComplete){}
         return _sports;
 
