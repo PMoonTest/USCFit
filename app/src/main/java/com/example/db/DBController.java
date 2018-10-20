@@ -135,7 +135,7 @@ public class DBController {
         return _sports;
 
     }
-    public void addActicity(String email, Activity ac){
+    public void addActivity(String email, Activity ac){
         // Add a new document with a generated id.
         Map<String, Object> data = new HashMap<>();
         data.put("name", ac.name);
@@ -319,6 +319,11 @@ public class DBController {
                     }
                 });
 
+    }
+    public List<Plan> getAllPlan(String email){
+
+
+        return null;
     }
 
 }
