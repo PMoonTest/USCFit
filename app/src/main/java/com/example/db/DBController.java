@@ -120,6 +120,7 @@ public class DBController {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
+                        System.out.println("Complete!!!!!!!!!!!!!!!!!");
                         SportComplete = true;
                     }
                 });
@@ -132,6 +133,7 @@ public class DBController {
             return null;
         }
         while(!SportComplete){}
+        System.out.println("出来1111111111111111");
         return _sports;
 
     }
