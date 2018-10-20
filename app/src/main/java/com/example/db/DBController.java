@@ -222,7 +222,7 @@ public class DBController {
 
 
     }
-    public void getPlan(String email, String planName){
+    public Plan getPlan(String email, String planName){
         final Plan a = new Plan();
         DocumentReference docRef = db.collection("Users").document(email).collection("Plans").document(planName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -242,16 +242,66 @@ public class DBController {
                 }
             }
         });
+       a.activity = getAllActivity(email);
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            return;
+            return null;
         }
-
+        return a;
 
 
     }
-    public void setPersonalInfo(){
+    public void setPersonalInfo(String email, int height, int weight, int age){
+        DocumentReference userRef = db.collection("Users").document(email);
+
+
+        userRef
+                .update("age", age)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+        userRef
+                .update("height", height)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+        userRef
+                .update("weight", weight)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
 
     }
 
