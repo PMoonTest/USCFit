@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ProgressActivity">
 
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/loadingView"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <android.support.v7.widget.CardView
+        android:id="@+id/progressView"
         android:layout_width="376dp"
         android:layout_height="261dp"
         android:layout_marginEnd="8dp"
@@ -26,7 +35,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:progress="10"/>
+                android:progress="10" />
 
             <TextView
                 android:id="@+id/textViewPlan1"
