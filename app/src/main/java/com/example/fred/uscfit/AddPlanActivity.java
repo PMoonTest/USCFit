@@ -5,28 +5,45 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
+
+import com.example.Sport;
+import com.example.db.DBController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class AddPlanActivity extends AppCompatActivity {
+    private GetAllSports mGetAllSports = null;
+    private DBController dbController = null;
+    private static List<String> mySports;
+    private static ArrayAdapter<String> dataAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
+
+        dbController = new DBController();
+        mGetAllSports = new GetAllSports(getIntent().getStringExtra("email"));
+        mGetAllSports.execute((Void) null);
+        mySports = mGetAllSports.getSports();
+        dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mySports);
 
         setContentView(R.layout.activity_add_plan);
 
@@ -40,26 +57,16 @@ public class AddPlanActivity extends AppCompatActivity {
                 EditText planNameInput = (EditText) findViewById(R.id.planNameInput);
 
                 // add activity name label
-                TextView activityNameLabel = new TextView(that);
-                activityNameLabel.setId(new Integer(1));
-                activityNameLabel.setText("Activity Name");
-                activityNameLabel.setTextSize(24);
-                activityNameLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+                Spinner spinner = new Spinner(that);
+                spinner.setId(new Integer(1));
+                spinner.setAdapter(dataAdapter);
+
+
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(
                         ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT
                 );
                 params1.addRule(RelativeLayout.ABOVE, planNameInput.getId());
-                activityNameLabel.setLayoutParams(params1);
-
-                // Add activity name input box
-                EditText activityNameInput = new EditText(that);
-                activityNameInput.setId(new Integer(2));
-                activityNameInput.setGravity(Gravity.CENTER_HORIZONTAL);
-                RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(
-                        ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT
-                );
-                params2.addRule(RelativeLayout.ABOVE, planNameInput.getId());
-                activityNameInput.setLayoutParams(params2);
+                spinner.setLayoutParams(params1);
 
                 Calendar today = Calendar.getInstance();
                 int mHour = today.get(Calendar.HOUR_OF_DAY);
@@ -128,11 +135,40 @@ public class AddPlanActivity extends AppCompatActivity {
                 pickEndBtn.setLayoutParams(paramsTemp);
 
 
-                layout.addView(activityNameLabel);
-                layout.addView(activityNameInput);
+                layout.addView(spinner);
                 layout.addView(pickStartBtn);
                 layout.addView(pickEndBtn);
             }
         });
+    }
+
+    private class GetAllSports extends AsyncTask<Void, Void, Boolean> {
+        private final String mEmail;
+        private List<Sport> sports;
+        private List<String> result = new ArrayList<String>();
+        GetAllSports(String email)
+        {
+            this.mEmail = email;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            this.sports = dbController.getAllSports(this.mEmail);
+            if(sports == null || sports.size() == 0) return false;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            for(Sport sport : this.sports)
+            {
+                result.add(sport.name);
+            }
+        }
+
+        public List<String> getSports()
+        {
+            return this.result;
+        }
     }
 }
