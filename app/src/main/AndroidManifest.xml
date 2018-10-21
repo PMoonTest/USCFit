@@ -51,9 +51,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="AddPlanActivity"
             android:theme="@style/FullscreenTheme" />
-        <activity android:name=".AddActivity"
-            android:label="AddActivity"></activity>
-
+        <activity
+            android:name=".AddActivity"
+            android:label="AddActivity" />
+        <activity android:name=".ProgressActivity"></activity>
     </application>
 
 </manifest>
