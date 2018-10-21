@@ -7,13 +7,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.db.DBController;
+import com.google.firebase.Timestamp;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +46,7 @@ public class ProgressActivity extends AppCompatActivity {
         mEmail = intent.getStringExtra("email");
         dbController = new DBController();
         cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -1);
         sdf = new SimpleDateFormat("yyyy_MM_dd");
 
 
@@ -48,11 +54,18 @@ public class ProgressActivity extends AppCompatActivity {
         mGetAllPlansTask.execute((Void) null);
 
 
+
+
     }
 
     public void updateFootstepBar() {
+        String currDate="2018_10_20";
         // for today's data
-        String currDate = sdf.format(cal);
+        if(cal != null) {
+            currDate = sdf.format(cal.getTime());
+            Log.d(TAG, "updateFootstepBar: " + currDate);
+        }
+
 
         long actualStep = myFootsteps.get(currDate).value;
         Plan plan = myPlans.get(currDate);
@@ -69,6 +82,37 @@ public class ProgressActivity extends AppCompatActivity {
         footstepsBar.setProgress((int)footstepProgress);
     }
 
+    public void updatePlanStatus() {
+        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
+        String currDate = outputSdf.format(cal.getTime());
+//        TextView tv2 = (TextView) findViewById(R.id.textViewPlan2);
+//        TextView tv3 = (TextView) findViewById(R.id.textViewPlan3);
+//        TextView tv4 = (TextView) findViewById(R.id.textViewPlan4);
+//        TextView tv5 = (TextView) findViewById(R.id.textViewPlan5);
+//        TextView tv6 = (TextView) findViewById(R.id.textViewPlan6);
+//        TextView tv7 = (TextView) findViewById(R.id.textViewPlan7);
+
+        boolean planCompleted = true;
+
+//        Plan plan = myPlans.get(currDate);
+
+
+
+
+//        TextView tv1 = (TextView) findViewById(R.id.textViewPlan1);
+//        tv1.setText(currDate);
+//        ImageView imageViewCheckOn = (ImageView) findViewById(R.id.imageView2);
+//        if(planCompleted) {
+//            imageViewCheckOn.setVisibility(View.VISIBLE);
+//        }
+//        else{
+//            imageViewCheckOn.setVisibility(View.GONE);
+//        }
+
+
+    }
+
+
 
     public class GetAllPlansTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -82,13 +126,16 @@ public class ProgressActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Map<String, Plan> myPlans = new HashMap<>();
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+//            calendar.add(Calendar.DAY_OF_MONTH, 1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
-            for(int i = 0; i<7; i++) {
+            for(int i = 0; i<3; i++) {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 String planName = sdf.format(calendar.getTime());
+                Log.d(TAG, "doInBackground: planName" + planName );
                 Plan currPlan = dbController.getPlan(mEmail, planName);
-                myPlans.put(planName, currPlan);
+                if(currPlan != null) {
+                    myPlans.put(planName, currPlan);
+                }
             }
             Log.d(TAG, "doInBackground: " + myPlans.size());
 
@@ -96,15 +143,18 @@ public class ProgressActivity extends AppCompatActivity {
             Map<String, Activity> myActivities = new HashMap<>();
             Map<String, Footstep> myFootsteps = new HashMap<>();
             for(Object o: allActivities) {
-                if(o.getClass() == Activity.class) {
-                    Activity activity = (Activity) o;
-                    Date date = activity.start.toDate();
-                    myActivities.put(sdf.format(date), activity);
+                HashMap<String, Object> map = (HashMap<String, Object>) o;
+                if(map.get("name").equals("footsteps")) {
+                    Footstep footstep = new Footstep();
+                    footstep.name = "footsteps";
+                    footstep.date = (Timestamp) map.get("start");
+                    footstep.value = (Long) map.get("value");
                 }
                 else {
-                    Footstep footstep = (Footstep) o;
-                    Date date = footstep.date.toDate();
-                    myFootsteps.put(sdf.format(date), footstep);
+                    Activity activity = new Activity();
+                    activity.name = (String) map.get("name");
+                    activity.start = (Timestamp)map.get("start");
+                    activity.end = (Timestamp)map.get("end");
                 }
             }
 
@@ -112,24 +162,27 @@ public class ProgressActivity extends AppCompatActivity {
             ProgressActivity.this.myPlans = myPlans;
             ProgressActivity.this.myFootsteps = myFootsteps;
 
+            ProgressActivity.this.updateFootstepBar();
+
 
             return true;
         }
 
-//        @Override
-//        protected void onPostExecute(final Boolean success) {
-//            if (success) {
-//                // this means sport already exists
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                // this means sport already exists
 //                alert("Oops...", "Sport category already exists.");
-//                return;
-//            } else {
-//                // sport doesn't exist
-//                // all input is valid, now call DBController to insert sport
-////                dbController.addSports(getIntent().getStringExtra("email"), new Sport(sportName, calories));
+//                ProgressActivity.this.updateFootstepBar();
+                return;
+            } else {
+                // sport doesn't exist
+                // all input is valid, now call DBController to insert sport
+//                dbController.addSports(getIntent().getStringExtra("email"), new Sport(sportName, calories));
 //                alert("Yeah!", "Successfully added sport category.");
-//                return;
-//            }
-//        }
+                return;
+            }
+        }
 
     }
 }
