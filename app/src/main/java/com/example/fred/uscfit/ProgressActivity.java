@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.example.Activity;
 import com.example.Footstep;
@@ -16,12 +17,20 @@ import com.example.db.DBController;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProgressActivity extends AppCompatActivity {
     private static final String TAG = "Progress";
     private DBController dbController = null;
     private String mEmail;
+    private Map<String, Plan> myPlans;
+    private Map<String, Activity> myActivities;
+    private Map<String, Footstep> myFootsteps;
+    private Calendar cal;
+    SimpleDateFormat sdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,29 +40,35 @@ public class ProgressActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mEmail = intent.getStringExtra("email");
         dbController = new DBController();
+        cal = Calendar.getInstance();
+        sdf = new SimpleDateFormat("yyyy_MM_dd");
 
 
         GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask((mEmail));
         mGetAllPlansTask.execute((Void) null);
+
+
     }
 
     public void updateFootstepBar() {
+        // for today's data
+        String currDate = sdf.format(cal);
 
-    }
-
-    private void alert(String title, String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(msg)
-                .setTitle(title);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
+        long actualStep = myFootsteps.get(currDate).value;
+        Plan plan = myPlans.get(currDate);
+        Footstep targetFootstep = null;
+        for(Object o: plan.activity) {
+            if(o.getClass() == Footstep.class) {
+                targetFootstep = (Footstep) o;
+                break;
             }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        }
+        long targetStep = targetFootstep.value;
+        double footstepProgress = (double) actualStep/targetStep * 100;
+        ProgressBar footstepsBar = (ProgressBar) findViewById(R.id.progressBar);
+        footstepsBar.setProgress((int)footstepProgress);
     }
+
 
     public class GetAllPlansTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -65,7 +80,7 @@ public class ProgressActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            List<Plan> myPlans = new ArrayList<>();
+            Map<String, Plan> myPlans = new HashMap<>();
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
@@ -73,21 +88,29 @@ public class ProgressActivity extends AppCompatActivity {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 String planName = sdf.format(calendar.getTime());
                 Plan currPlan = dbController.getPlan(mEmail, planName);
-                myPlans.add(currPlan);
+                myPlans.put(planName, currPlan);
             }
             Log.d(TAG, "doInBackground: " + myPlans.size());
 
             List<Object> allActivities = dbController.getAllActivity(mEmail);
-            List<Activity> myActivities = new ArrayList<>();
-            Footstep myFootstep = null;
+            Map<String, Activity> myActivities = new HashMap<>();
+            Map<String, Footstep> myFootsteps = new HashMap<>();
             for(Object o: allActivities) {
                 if(o.getClass() == Activity.class) {
-                    myActivities.add((Activity) o);
+                    Activity activity = (Activity) o;
+                    Date date = activity.start.toDate();
+                    myActivities.put(sdf.format(date), activity);
                 }
                 else {
-                    myFootstep = (Footstep) o;
+                    Footstep footstep = (Footstep) o;
+                    Date date = footstep.date.toDate();
+                    myFootsteps.put(sdf.format(date), footstep);
                 }
             }
+
+            ProgressActivity.this.myActivities = myActivities;
+            ProgressActivity.this.myPlans = myPlans;
+            ProgressActivity.this.myFootsteps = myFootsteps;
 
 
             return true;
