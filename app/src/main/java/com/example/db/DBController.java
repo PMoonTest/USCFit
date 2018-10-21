@@ -181,6 +181,7 @@ public class DBController {
                     }
                 });
     }
+
     public List<Object> getAllActivity(String email){
         activityComplete = false;
         final List<Object> allActivities = new ArrayList<>();
