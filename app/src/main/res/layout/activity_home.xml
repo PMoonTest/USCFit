@@ -85,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:background="@drawable/menu_button"
+            android:onClick="checkProgress"
             android:text="@string/progress_btn_text" />
     </LinearLayout>
 
