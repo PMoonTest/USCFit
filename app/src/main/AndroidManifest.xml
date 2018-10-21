@@ -40,17 +40,20 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".HomeActivity"
-            android:label="Home"></activity>
+            android:label="Home" />
         <activity
             android:name=".AddSportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_add_sport"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".AddPlanActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="AddPlanActivity"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity android:name=".AddActivity"
+            android:label="AddActivity"></activity>
+
     </application>
 
 </manifest>

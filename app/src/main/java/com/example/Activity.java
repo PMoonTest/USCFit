@@ -1,9 +1,17 @@
 package com.example;
 
-import com.google.type.Date;
+import com.google.firebase.Timestamp;
 
 public class Activity {
     public String name;
-    public Date start;
-    public Date end;
+    public Timestamp start;
+    public Timestamp end;
+
+    public  Activity(){}
+
+    public Activity(String name, Timestamp start, Timestamp end) {
+        this.name = name;
+        this.start = start;
+        this.end = end;
+    }
 }

@@ -25,6 +25,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     private Button mAddSportBtn;
     private Button mAddPlanBtn;
+    private Button mAddActivityBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
         mAddSportBtn = (Button) findViewById(R.id.addSportBtn);
         mAddPlanBtn = (Button) findViewById(R.id.addPlanBtn);
-
+        mAddActivityBtn = findViewById(R.id.addActivityBtn);
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -57,7 +59,6 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                 else{
                     b.setText(getString(R.string.footstep_btn_text));
                 }
-
             }
         });
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -82,6 +83,15 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddPlanActivity.class);
+                intent.putExtra("email", mEmail);
+                startActivity(intent);
+            }
+        });
+
+        mAddActivityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddActivity.class);
                 intent.putExtra("email", mEmail);
                 startActivity(intent);
             }
