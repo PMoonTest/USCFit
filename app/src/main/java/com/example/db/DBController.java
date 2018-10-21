@@ -295,7 +295,7 @@ public class DBController {
             return null;
         }
         while(!PlanComplete){}
-        Log.d(TAG,a.name);
+//        Log.d(TAG,a.name);
         return a;
 
 

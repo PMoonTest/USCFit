@@ -147,14 +147,18 @@ public class ProgressActivity extends AppCompatActivity {
                 if(map.get("name").equals("footsteps")) {
                     Footstep footstep = new Footstep();
                     footstep.name = "footsteps";
-                    footstep.date = (Timestamp) map.get("start");
+                    footstep.date = (Timestamp) map.get("date");
                     footstep.value = (Long) map.get("value");
+                    String currDate = sdf.format(footstep.date.toDate());
+                    myFootsteps.put(currDate, footstep);
                 }
                 else {
                     Activity activity = new Activity();
                     activity.name = (String) map.get("name");
                     activity.start = (Timestamp)map.get("start");
                     activity.end = (Timestamp)map.get("end");
+                    String currDate = sdf.format(activity.start.toDate());
+                    myActivities.put(currDate, activity);
                 }
             }
 
