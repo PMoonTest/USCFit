@@ -1,11 +1,11 @@
 package com.example;
 
-import com.google.type.Date;
+import com.google.firebase.Timestamp;
 
 public class Footstep {
     public String name;
-    public Date date;
-    public int value;
+    public Timestamp date;
+    public Long value;
 
 
 }

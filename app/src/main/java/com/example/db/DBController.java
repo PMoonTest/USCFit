@@ -11,18 +11,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.type.Date;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -32,6 +33,7 @@ public class DBController {
     public static boolean activityComplete = false;
     public static boolean SportComplete = false;
     public static boolean PlanComplete = false;
+    private static Semaphore sema = new Semaphore(2);
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -115,7 +117,7 @@ public class DBController {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             List<Sport> sports  = task.getResult().toObjects(Sport.class);
-                            if(sports != null  && sports.size() != 0  ) _sports = sports;
+                            if(sports != null  && sports.size() != 0) _sports = sports;
                             else _sports.clear();
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -198,12 +200,7 @@ public class DBController {
                         activityComplete = true;
                     }
                 });
-//        try {
-//            // Simulate network access.
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            return null;
-//        }
+
         while(!activityComplete){}
         return allActivities;
     }
@@ -234,22 +231,52 @@ public class DBController {
 
             }
         }
-
-
     }
     public Plan getPlan(String email, String planName){
         PlanComplete = false;
         final Plan a = new Plan();
-        DocumentReference docRef = db.collection("Users").document(email).collection("Plans").document(planName);
+        final DocumentReference docRef = db.collection("Users").document(email).collection("Plans").document(planName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        docRef.collection("Activities").get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    List<Object> inner_activities = new ArrayList<>();
+
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                                if(document.getData().get("name").equals("footsteps")){
+                                                    Footstep ft = new Footstep();
+                                                    ft.date = (Timestamp)document.getData().get("date");
+                                                    ft.name = "footsteps";
+                                                    ft.value = (Long)document.getData().get("value");
+                                                    inner_activities.add(ft);
+                                                }else{
+                                                    Activity ac = new Activity();
+                                                    ac.start = (Timestamp)document.getData().get("start");
+                                                    ac.end = (Timestamp)document.getData().get("end");
+                                                    ac.name = (String)document.getData().get("name");
+                                                    inner_activities.add(ac);
+                                                }
+                                            }
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                        a.activity = inner_activities;
+                                    }
+                                });
+
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        Log.d(TAG,(String)document.getData().get("name"));
                         a.name = (String)document.getData().get("name");
-                        a.date = (Date)document.getData().get("date");
+                        a.date = (Timestamp) document.getData().get("date");
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -259,7 +286,7 @@ public class DBController {
                 PlanComplete = true;
             }
         });
-       a.activity = getAllActivity(email);
+
 
         try {
             Thread.sleep(2000);
@@ -267,6 +294,7 @@ public class DBController {
             return null;
         }
         while(!PlanComplete){}
+        Log.d(TAG,a.name);
         return a;
 
 
@@ -321,11 +349,6 @@ public class DBController {
                     }
                 });
 
-    }
-    public List<Plan> getAllPlan(String email){
-
-
-        return null;
     }
 
 }
