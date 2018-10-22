@@ -20,9 +20,11 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.Activity;
@@ -50,11 +52,13 @@ public class ProgressActivity extends AppCompatActivity {
     private SimpleDateFormat sdf;
 
     private ConstraintLayout mConstraintLayout;
+    private View mLoadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
+
 
         Intent intent = getIntent();
         mEmail = intent.getStringExtra("email");
@@ -62,6 +66,8 @@ public class ProgressActivity extends AppCompatActivity {
         cal = Calendar.getInstance();
         sdf = new SimpleDateFormat("yyyy_MM_dd");
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+        mLoadingView = findViewById(R.id.loadingProgress);
+        showProgress(true);
 
 
         GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask((mEmail));
@@ -69,29 +75,35 @@ public class ProgressActivity extends AppCompatActivity {
 
     }
 
+
     public void updatePlanStatus() {
         SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
+        final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
         boolean weeklyPlanCompleted = true;
-        for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
-            Calendar currCal = cal;
-            currCal.add(Calendar.DAY_OF_MONTH, i * (-1));
-            String currDate = sdf.format(currCal.getTime());
-            String outputDate = outputSdf.format(currCal.getTime());
 
+        Calendar currCal = cal;
+        for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
             if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
                 continue;
             }
             CardView childCardView = (CardView) mConstraintLayout.getChildAt(i);
             LinearLayout childLinearLayout = (LinearLayout) childCardView.getChildAt(0);
+            if(childLinearLayout.getChildAt(0).getClass() != ProgressBar.class) {
+                continue;
+            }
             ProgressBar childProgressBar = (ProgressBar) childLinearLayout.getChildAt(0);
             LinearLayout childVerticalLayout = (LinearLayout) childLinearLayout.getChildAt(1);
             final ImageView childImageView = (ImageView) childVerticalLayout.getChildAt(0);
             TextView childTextView = (TextView) childVerticalLayout.getChildAt(1);
 
+            currCal.add(Calendar.DAY_OF_MONTH, -1);
+            String currDate = sdf.format(currCal.getTime());
+            String outputDate = outputSdf.format(currCal.getTime());
+
             // get plan
             Plan plan = myPlans.get(currDate);
             if(plan == null) {
-                childProgressBar.setProgress(100);
+                childProgressBar.setProgress(0);
                 childTextView.setText("No plan for " + outputDate);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -131,6 +143,7 @@ public class ProgressActivity extends AppCompatActivity {
                     boolean plannedActivityCompleted = false;
                     for(Activity activity : currActivities) {
                         if(isFinishedActivity(activity, plannedActivity)) {
+                            Log.d(TAG, "run: FINISHED PLAN");
                             plannedActivityCompleted = true;
                             break;
                         }
@@ -141,8 +154,22 @@ public class ProgressActivity extends AppCompatActivity {
                     }
                 }
             }
-            if(plancompleted) {
+            if(plancompleted && footstepProgress == 100) {
                 childTextView.setText(outputDate + " Completed");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageView newBadge = new ImageView(ProgressActivity.this);
+                        newBadge.setImageResource(R.drawable.guarantee);
+                        TableRow.LayoutParams params = new TableRow.LayoutParams();
+                        params.height = 100;
+                        params.width = 100;
+                        newBadge.setLayoutParams(params);
+                        BadgeTableRow.addView(newBadge);
+                    }
+                });
+
+
             }
             else {
                 childTextView.setText(outputDate + " Not completed");
@@ -156,12 +183,17 @@ public class ProgressActivity extends AppCompatActivity {
             }
         }
 
-        if(!weeklyPlanCompleted) {
+        if(weeklyPlanCompleted) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ImageView weeklyBadgeView = (ImageView) findViewById(R.id.weeklyBadge);
-                    weeklyBadgeView.setVisibility(View.GONE);
+                    ImageView newBadge = new ImageView(ProgressActivity.this);
+                    newBadge.setImageResource(R.drawable.trojan);
+                    TableRow.LayoutParams params = new TableRow.LayoutParams();
+                    params.height = 100;
+                    params.width = 100;
+                    newBadge.setLayoutParams(params);
+                    BadgeTableRow.addView(newBadge);
                 }
             });
         }
@@ -249,6 +281,7 @@ public class ProgressActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            showProgress(false);
             if (success) {
                 // this means sport already exists
 //                alert("Oops...", "Sport category already exists.");
@@ -265,4 +298,41 @@ public class ProgressActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mConstraintLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+            mConstraintLayout.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mConstraintLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoadingView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mLoadingView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mConstraintLayout.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
 }
