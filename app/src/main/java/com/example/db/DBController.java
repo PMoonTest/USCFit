@@ -202,6 +202,14 @@ public class DBController {
                     }
                 });
 
+        try {
+            // Simulate network access.
+
+
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return null;
+        }
         while(!activityComplete){}
         return allActivities;
     }
