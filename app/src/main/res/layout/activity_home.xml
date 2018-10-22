@@ -32,13 +32,13 @@
                 android:id="@+id/footstepBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
                 android:background="@drawable/footstep_button"
                 android:text="@string/footstep_btn_text" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/footstep"
+                tools:ignore="MissingPrefix"
                 />
         </LinearLayout>
 
@@ -89,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/add_activity"
                     android:layout_marginBottom="20dp"
+                    tools:ignore="MissingPrefix"
                     />
 
             </LinearLayout>
@@ -110,7 +111,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/menu_button"
                     android:text="@string/sport_btn_text"
-                    android:layout_alignParentEnd="true"
                     android:textColor="#ffffff"
                     />
                 <ImageView
@@ -118,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/add_sport"
                     android:layout_marginBottom="20dp"
+                    tools:ignore="MissingPrefix"
                     />
             </LinearLayout>
             <View
@@ -156,6 +157,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/add_plan"
                     android:layout_marginBottom="20dp"
+                    tools:ignore="MissingPrefix"
                     />
 
             </LinearLayout>
@@ -183,6 +185,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/check_progress"
                     android:layout_marginBottom="20dp"
+                    tools:ignore="MissingPrefix"
                     />
             </LinearLayout>
             <View
