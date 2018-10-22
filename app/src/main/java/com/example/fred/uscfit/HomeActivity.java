@@ -99,6 +99,12 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    public void checkProgress(View view) {
+        Intent intent = new Intent(this, ProgressActivity.class);
+        intent.putExtra("email", mEmail);
+        startActivity(intent);
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         mStepNum = String.valueOf(event.values[0]);
