@@ -7,9 +7,12 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -46,8 +50,6 @@ public class ProgressActivity extends AppCompatActivity {
     private SimpleDateFormat sdf;
 
     private ConstraintLayout mConstraintLayout;
-    private View mProgressView;
-    private View mLoadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,6 @@ public class ProgressActivity extends AppCompatActivity {
         mEmail = intent.getStringExtra("email");
         dbController = new DBController();
         cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, -1);
         sdf = new SimpleDateFormat("yyyy_MM_dd");
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
 
@@ -69,81 +70,103 @@ public class ProgressActivity extends AppCompatActivity {
     }
 
     public void updatePlanStatus() {
+        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
+        boolean weeklyPlanCompleted = true;
         for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
+            Calendar currCal = cal;
+            currCal.add(Calendar.DAY_OF_MONTH, i * (-1));
+            String currDate = sdf.format(currCal.getTime());
+            String outputDate = outputSdf.format(currCal.getTime());
+
+            if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
+                continue;
+            }
             CardView childCardView = (CardView) mConstraintLayout.getChildAt(i);
             LinearLayout childLinearLayout = (LinearLayout) childCardView.getChildAt(0);
             ProgressBar childProgressBar = (ProgressBar) childLinearLayout.getChildAt(0);
-            TextView childTextView = (TextView) childLinearLayout.getChildAt(1);
+            LinearLayout childVerticalLayout = (LinearLayout) childLinearLayout.getChildAt(1);
+            final ImageView childImageView = (ImageView) childVerticalLayout.getChildAt(0);
+            TextView childTextView = (TextView) childVerticalLayout.getChildAt(1);
 
-            childProgressBar.setProgress(100);
-            childTextView.setText("Hello World");
-        }
-    }
+            // get plan
+            Plan plan = myPlans.get(currDate);
+            if(plan == null) {
+                childProgressBar.setProgress(100);
+                childTextView.setText("No plan for " + outputDate);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        childImageView.setVisibility(View.GONE);
+                    }
+                });
+                weeklyPlanCompleted = false;
+                continue;
+            }
 
-    public void updateFootstepBar() {
-        String currDate="2018_10_20";
-        // for today's data
-        if(cal != null) {
-            currDate = sdf.format(cal.getTime());
-            Log.d(TAG, "updateFootstepBar: " + currDate);
-        }
+            // get footsteps
+            long actualStep = 0;
+            if(myFootsteps.containsKey(currDate)) {
+                actualStep = myFootsteps.get(currDate).value;
+            }
+            Footstep targetFootstep = null;
+            long targetStep = actualStep;
+            for(Object o: plan.activity) {
+                if(o.getClass() == Footstep.class) {
+                    targetFootstep = (Footstep) o;
+                    break;
+                }
+            }
+            if(targetFootstep != null) {
+                targetStep = targetFootstep.value;
+            }
+            double footstepProgress = (double) actualStep/targetStep * 100;
+            childProgressBar.setProgress((int)footstepProgress);
 
-
-        long actualStep = myFootsteps.get(currDate).value;
-        Plan plan = myPlans.get(currDate);
-        Footstep targetFootstep = null;
-        for(Object o: plan.activity) {
-            if(o.getClass() == Footstep.class) {
-                targetFootstep = (Footstep) o;
-                break;
+            // get plan details
+            boolean plancompleted = true;
+            for(Object o: plan.activity) {
+                if(o.getClass() == Activity.class) {
+                    Activity plannedActivity = (Activity) o;
+                    List<Activity> currActivities = myActivities.get(currDate);
+                    boolean plannedActivityCompleted = false;
+                    for(Activity activity : currActivities) {
+                        if(isFinishedActivity(activity, plannedActivity)) {
+                            plannedActivityCompleted = true;
+                            break;
+                        }
+                    }
+                    if(!plannedActivityCompleted) {
+                        plancompleted = false;
+                        break;
+                    }
+                }
+            }
+            if(plancompleted) {
+                childTextView.setText(outputDate + " Completed");
+            }
+            else {
+                childTextView.setText(outputDate + " Not completed");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        childImageView.setVisibility(View.GONE);
+                    }
+                });
+                weeklyPlanCompleted = false;
             }
         }
-        long targetStep = targetFootstep.value;
-        double footstepProgress = (double) actualStep/targetStep * 100;
-        ProgressBar footstepsBar = (ProgressBar) findViewById(R.id.progressBar);
-        footstepsBar.setProgress((int)footstepProgress);
+
+        if(!weeklyPlanCompleted) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ImageView weeklyBadgeView = (ImageView) findViewById(R.id.weeklyBadge);
+                    weeklyBadgeView.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
-//    public void updatePlanStatus() {
-//        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
-//        String currDate = sdf.format(cal.getTime());
-////        TextView tv2 = (TextView) findViewById(R.id.textViewPlan2);
-////        TextView tv3 = (TextView) findViewById(R.id.textViewPlan3);
-////        TextView tv4 = (TextView) findViewById(R.id.textViewPlan4);
-////        TextView tv5 = (TextView) findViewById(R.id.textViewPlan5);
-////        TextView tv6 = (TextView) findViewById(R.id.textViewPlan6);
-////        TextView tv7 = (TextView) findViewById(R.id.textViewPlan7);
-//
-//        boolean planCompleted = true;
-//        Plan plan = myPlans.get(currDate);
-//        for(Object o: plan.activity) {
-//            if (o.getClass() == Activity.class) {
-//                Activity plannedActivity = (Activity) o;
-//                List<Activity> currActivities = myActivities.get(currDate);
-//                boolean plannedActivityCompleted = false;
-//                for (Activity activity : currActivities) {
-//                    if (isFinishedActivity(activity, plannedActivity)) {
-//                        plannedActivityCompleted = true;
-//                        break;
-//                    }
-//                }
-//                if (!plannedActivityCompleted) {
-//                    planCompleted = false;
-//                    break;
-//                }
-//            }
-//        }
-//        TextView tv1 = (TextView) findViewById(R.id.textViewPlan1);
-////            ImageView imageViewCheckOn = (ImageView) findViewById(R.id.imageView2);
-//        if(planCompleted) {
-//            tv1.setText(currDate + " completed");
-//        }
-//        else{
-//            tv1.setText(currDate + " not completed");
-//        }
-//
-//
-//    }
 
     // return true is a fulfills plan b
     public boolean isFinishedActivity(Activity a, Activity b) {
@@ -170,7 +193,7 @@ public class ProgressActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             Map<String, Plan> myPlans = new HashMap<>();
             Calendar calendar = Calendar.getInstance();
-//            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
             for(int i = 0; i<3; i++) {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
