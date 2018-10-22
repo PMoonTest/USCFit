@@ -41,8 +41,9 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_home);
         // initialize welcome message and menus
         mEmail = getIntent().getStringExtra("email");
+
         mWelcomeMessage = findViewById(R.id.welcomeMessage);
-        String welcomeMessage = "Welcome " + mEmail;
+        String welcomeMessage = "Welcome " + mEmail.split("@")[0];
         mWelcomeMessage.setText(welcomeMessage);
 
         mAddSportLayout = (LinearLayout) findViewById(R.id.addSportLayout);

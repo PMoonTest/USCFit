@@ -1,6 +1,7 @@
 package com.example.fred.uscfit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
@@ -73,13 +74,13 @@ public class AddActivity extends AppCompatActivity {
 
     private DBController dbController;
 
-
-    private List<String> userSports;
-
     private GetAllSports mGetAllSports;
 
-    private Spinner spinner;
-    private ArrayAdapter<String> dataAdapter;
+    private static ArrayAdapter<String> dataAdapter;
+
+    private static List<String> userSports;
+
+    final Context that = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +98,11 @@ public class AddActivity extends AppCompatActivity {
 
         mActivityName = findViewById(R.id.activity_name);
 
+        final Spinner spinner = findViewById(R.id.sports_dropdown_menu);
+
         // format input and update activity name
         TextWatcher watcher = new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -117,10 +121,21 @@ public class AddActivity extends AppCompatActivity {
                     mActivityName.setText(spaceFreeString);
                     mActivityName.setSelection(spaceFreeString.length());
                 }
+                if(userSports!=null && !userSports.contains(editableString)){
+                    Toast.makeText(that, "No such sport", Toast.LENGTH_SHORT).show();
+                }
             }
         };
 
         mActivityName.addTextChangedListener(watcher);
+        mActivityName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userSports = mGetAllSports.getSports();
+                dataAdapter = new ArrayAdapter<>(that, android.R.layout.simple_spinner_item, userSports);
+                spinner.setAdapter(dataAdapter);
+            }
+        });
 
         mStartTime = findViewById(R.id.activity_start_time);
 
@@ -256,7 +271,9 @@ public class AddActivity extends AppCompatActivity {
                     Timestamp endTimeStamp = new Timestamp(activityEndDate.getTime());
                     com.example.Activity act = new com.example.Activity(mActivityName.getText().toString(), startTimeStamp, endTimeStamp);
                     dbController.addActivity(mEmail, act);
+                    Toast.makeText(v.getContext(), "activity has been submitted!", Toast.LENGTH_LONG);
                 }
+
             }
         });
 
@@ -274,18 +291,17 @@ public class AddActivity extends AppCompatActivity {
         // get user's sports asy
         mGetAllSports = new GetAllSports(getIntent().getStringExtra("email"));
         mGetAllSports.execute((Void) null);
-        userSports = mGetAllSports.getSports();
 
-        spinner = findViewById(R.id.sports_dropdown_menu);
-        dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userSports);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
-        spinner.setId(1);
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userSports);
+//        spinner.setAdapter(dataAdapter);
+        //dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String text = parent.getItemAtPosition(position).toString();
-                text = spinner.getItemAtPosition(position).toString();
+
+//                String text = parent.getItemAtPosition(position).toString();
+//                text = spinner.getItemAtPosition(position).toString();
                 mActivityName.setText(parent.getItemAtPosition(position).toString());
             }
             @Override
@@ -312,6 +328,12 @@ public class AddActivity extends AppCompatActivity {
             Toast.makeText(this, "Please select activity end time",  Toast.LENGTH_LONG).show();
             return false;
         }
+
+        if(activityStartDate.compareTo(activityEndDate) >= 0){
+            Toast.makeText(this, "Start time must be earlier that the end time", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         return true;
 
     }
