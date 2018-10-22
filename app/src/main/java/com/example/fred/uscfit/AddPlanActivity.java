@@ -7,10 +7,8 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -31,10 +29,11 @@ import com.example.Plan;
 import com.example.Sport;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Calendar;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -102,6 +101,8 @@ public class AddPlanActivity extends AppCompatActivity {
                 AddPlan mAddPlan = new AddPlan(plan, getIntent().getStringExtra("email"));
                 mAddPlan.execute((Void) null);
 
+                showAlertWhenValid();
+
                 System.out.println(plan.name);
                 System.out.println(plan.date==null ? "null" : plan.date.toDate().toString());
                 System.out.println("&************************");
@@ -143,7 +144,7 @@ public class AddPlanActivity extends AppCompatActivity {
                 }
 
                 // initializes the activityName
-                activityList.get(index).name = spinner.getSelectedItem().toString();
+                activityList.get(index).name = spinner.getSelectedItem() == null ? "" : spinner.getSelectedItem().toString();
 
                 // sets the onchange listener for spinner
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -260,6 +261,17 @@ public class AddPlanActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Error Message");
         builder.setMessage("Invalid User Input. Please Fill in All Fields!");
+        builder.setPositiveButton("OK", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // shows alert box when the submission is successful
+    private void showAlertWhenValid() {
+        // when the user input is invalid (when they didn't input name or something)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Message");
+        builder.setMessage("Submit Successful!");
         builder.setPositiveButton("OK", null);
         AlertDialog dialog = builder.create();
         dialog.show();
