@@ -3,7 +3,12 @@ package com.example.fred.uscfit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -13,6 +18,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,14 +34,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.Activity;
+import com.example.Plan;
 import com.example.User;
 import com.example.db.DBController;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -329,10 +339,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             // Create a reference to the cities collection
             CollectionReference usersRef = db.db.collection("Users");
-
-            //db.getPlan("siyuanx@usc.edu","MondayPlan");
+            //System.out.println(SystemClock.elapsedRealtime());
+//            Plan b = db.getPlan("siyuanx@usc.edu","2018_10_20");
+//            Activity a =(Activity)b.activity.get(0);
+//            System.out.println(a.start.getSeconds());
             //System.out.println(a.name);
             // Create a query against the collection.
+            createNotificationChannel();
+            Calendar activityStartDate = Calendar.getInstance();
+            Activity a = new Activity();
+            activityStartDate.set(Calendar.MONTH, 10);
+            activityStartDate.set(Calendar.YEAR, 2018);
+            activityStartDate.set(Calendar.DAY_OF_MONTH, 22);
+            activityStartDate.set(Calendar.HOUR, 2);
+            activityStartDate.set(Calendar.MINUTE, 42);
+            Timestamp startTimeStamp = new Timestamp(activityStartDate.getTime());
+            //System.out.println(startTimeStamp.getSeconds()-12*60*60);
+            long real_time = startTimeStamp.getSeconds()-10800-12*60*60;
+            System.out.println(real_time);
+            AlarmManager alarmMgr;
+            alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);;
+            PendingIntent alarmIntent;
+//            Calendar calendar = Calendar.getInstance();
+//            calendar = Calendar.getInstance();
+//            calendar.setTimeInMillis(real_time*1000);
+//            calendar.setTimeInMillis(System.currentTimeMillis()+5000);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 5);
+            System.out.println(calendar.getTimeInMillis());
+            Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+            intent.putExtra("name","abc");
+            intent.setAction("abc");
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+            alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(), alarmIntent);
             Query query = usersRef.whereEqualTo("email", mEmail);
             //List<User> users = new ArrayList<>();
             //System.out.println(query.get());
@@ -404,6 +448,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "my channel";
+            String description = "this is my channel";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("myid", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
