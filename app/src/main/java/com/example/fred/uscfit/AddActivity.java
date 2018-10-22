@@ -2,26 +2,33 @@ package com.example.fred.uscfit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.Sport;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -66,6 +73,13 @@ public class AddActivity extends AppCompatActivity {
 
     private DBController dbController;
 
+
+    private List<String> userSports;
+
+    private GetAllSports mGetAllSports;
+
+    private Spinner spinner;
+    private ArrayAdapter<String> dataAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +270,29 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+
+        // get user's sports asy
+        mGetAllSports = new GetAllSports(getIntent().getStringExtra("email"));
+        mGetAllSports.execute((Void) null);
+        userSports = mGetAllSports.getSports();
+
+        spinner = findViewById(R.id.sports_dropdown_menu);
+        dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, userSports);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+        spinner.setId(1);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = parent.getItemAtPosition(position).toString();
+                text = spinner.getItemAtPosition(position).toString();
+                mActivityName.setText(parent.getItemAtPosition(position).toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private boolean validateTime(){
@@ -278,4 +315,38 @@ public class AddActivity extends AppCompatActivity {
         return true;
 
     }
+
+
+
+    // asynchhronous function that gets all sports from database
+    private class GetAllSports extends AsyncTask<Void, Void, Boolean> {
+        private final String mEmail;
+        private List<Sport> sports;
+        private List<String> result = new ArrayList<>();
+        GetAllSports(String email)
+        {
+            this.mEmail = email;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params){
+            this.sports = dbController.getAllSports(this.mEmail);
+            if(sports == null || sports.size() == 0) return false;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            for(Sport sport : this.sports)
+            {
+                result.add(sport.name);
+            }
+        }
+
+        public List<String> getSports()
+        {
+            return this.result;
+        }
+    }
+
 }
