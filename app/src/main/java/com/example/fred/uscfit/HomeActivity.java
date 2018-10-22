@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +24,9 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private String mStepNum;
 
-    private Button mAddSportBtn;
-    private Button mAddPlanBtn;
-    private Button mAddActivityBtn;
+    private LinearLayout mAddSportLayout;
+    private LinearLayout mAddPlanLayout;
+    private LinearLayout mAddActivityLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,9 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         String welcomeMessage = "Welcome " + mEmail;
         mWelcomeMessage.setText(welcomeMessage);
 
-        mAddSportBtn = (Button) findViewById(R.id.addSportBtn);
-        mAddPlanBtn = (Button) findViewById(R.id.addPlanBtn);
-        mAddActivityBtn = findViewById(R.id.addActivityBtn);
+        mAddSportLayout = (LinearLayout) findViewById(R.id.addSportLayout);
+        mAddPlanLayout = (LinearLayout) findViewById(R.id.addPlanLayout);
+        mAddActivityLayout = findViewById(R.id.addActivityLayout);
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -70,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
 
         // connect add sport button to AddSportActivity
-        mAddSportBtn.setOnClickListener(new View.OnClickListener() {
+        mAddSportLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeActivity.this, AddSportActivity.class);
@@ -79,7 +80,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        mAddPlanBtn.setOnClickListener(new View.OnClickListener() {
+        mAddPlanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddPlanActivity.class);
@@ -88,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        mAddActivityBtn.setOnClickListener(new View.OnClickListener() {
+        mAddActivityLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddActivity.class);
