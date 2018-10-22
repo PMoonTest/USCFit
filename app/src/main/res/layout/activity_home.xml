@@ -23,15 +23,24 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/title_home" />
 
-
-        <Button
-            android:id="@+id/footstepBtn"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/footstep_button"
-            android:text="@string/footstep_btn_text" />
-
+            >
+            <Button
+                android:id="@+id/footstepBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/footstep_button"
+                android:text="@string/footstep_btn_text" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/footstep"
+                />
+        </LinearLayout>
 
     </RelativeLayout>
 
@@ -45,47 +54,143 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >
-
         <View
             android:layout_width="match_parent"
             android:layout_height="50dp" />
 
-
-        <Button
-            android:id="@+id/addActivityBtn"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/menu_button"
-            android:text="@string/activity_btn_text" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="50dp"
+            >
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:background="#2c7cff"
+                >
+
+                <Button
+                    android:id="@+id/addActivityBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/menu_button"
+                    android:text="@string/activity_btn_text"
+                    android:textColor="#ffffff" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add_activity"
+                    android:layout_marginBottom="20dp"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="#2c7cff"
+                android:orientation="vertical"
+                >
+                <Button
+                    android:id="@+id/addSportBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/menu_button"
+                    android:text="@string/sport_btn_text"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="#ffffff"
+                    />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add_sport"
+                    android:layout_marginBottom="20dp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
 
-        <Button
-            android:id="@+id/addSportBtn"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/menu_button"
-            android:text="@string/sport_btn_text" />
+            android:orientation="horizontal">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:background="#2c7cff"
+                >
+                <Button
+                    android:id="@+id/addPlanBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/menu_button"
+                    android:elevation="0dp"
+                    android:text="@string/plan_btn_text"
+                    android:textColor="#ffffff"
+                    />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add_plan"
+                    android:layout_marginBottom="20dp"
+                    />
 
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:background="#2c7cff"
+                >
+                <Button
+                    android:id="@+id/progressBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/menu_button"
+                    android:text="@string/progress_btn_text"
+                    android:textColor="#ffffff"
+                    />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/check_progress"
+                    android:layout_marginBottom="20dp"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/addPlanBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/menu_button"
-            android:elevation="0dp"
-            android:text="@string/plan_btn_text" />
-
-        <Button
-            android:id="@+id/progressBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/menu_button"
-            android:text="@string/progress_btn_text" />
     </LinearLayout>
 
     <LinearLayout

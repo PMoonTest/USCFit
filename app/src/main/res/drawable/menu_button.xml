@@ -2,25 +2,22 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:shape="rectangle" >
-    <corners android:radius="20dp" />
-    <gradient
+    <corners android:radius="0dp" />
+<!--    <gradient
         android:angle="45"
         android:centerColor="#fff"
         android:centerX="45%"
         android:endColor="@color/common_google_signin_btn_text_dark_pressed"
         android:startColor="#E4E4E4"
-        android:type="linear" />
+        android:type="linear" />-->
     <padding
         android:left="0dp"
         android:top="0dp"
         android:right="0dp"
         android:bottom="0dp"
         />
-    <size
-        android:width="270dp"
-        android:height="30dp"
-        />
     <stroke
         android:width="0dp"
         android:color="#878787" />
+
 </shape>

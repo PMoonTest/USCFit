@@ -1,6 +1,7 @@
 package com.example.fred.uscfit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class AddActivity extends AppCompatActivity {
     private Button mDateCancel;
     private Button mDateSet;
     private Button mSubmit;
+    private Button mCancel;
 
     private static int year       = 0;
     private static int month      = 0; // Jan = 0, dec = 11
@@ -244,7 +246,15 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-
+        mCancel = findViewById(R.id.cancel_activity);
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("email", mEmail);
+                startActivity(intent);
+            }
+        });
 
     }
 
