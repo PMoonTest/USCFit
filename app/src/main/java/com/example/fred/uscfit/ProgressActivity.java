@@ -11,10 +11,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.ContactsContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.db.DBController;
+import com.google.api.Distribution;
 import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +45,7 @@ public class ProgressActivity extends AppCompatActivity {
     private Calendar cal;
     private SimpleDateFormat sdf;
 
+    private ConstraintLayout mConstraintLayout;
     private View mProgressView;
     private View mLoadingView;
 
@@ -55,16 +60,24 @@ public class ProgressActivity extends AppCompatActivity {
         cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1);
         sdf = new SimpleDateFormat("yyyy_MM_dd");
-        mProgressView = findViewById(R.id.progressView);
-        mLoadingView = findViewById(R.id.loadingView);
+        mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
 
 
         GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask((mEmail));
         mGetAllPlansTask.execute((Void) null);
 
+    }
 
+    public void updatePlanStatus() {
+        for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
+            CardView childCardView = (CardView) mConstraintLayout.getChildAt(i);
+            LinearLayout childLinearLayout = (LinearLayout) childCardView.getChildAt(0);
+            ProgressBar childProgressBar = (ProgressBar) childLinearLayout.getChildAt(0);
+            TextView childTextView = (TextView) childLinearLayout.getChildAt(1);
 
-
+            childProgressBar.setProgress(100);
+            childTextView.setText("Hello World");
+        }
     }
 
     public void updateFootstepBar() {
@@ -91,46 +104,46 @@ public class ProgressActivity extends AppCompatActivity {
         footstepsBar.setProgress((int)footstepProgress);
     }
 
-    public void updatePlanStatus() {
-        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
-        String currDate = sdf.format(cal.getTime());
-//        TextView tv2 = (TextView) findViewById(R.id.textViewPlan2);
-//        TextView tv3 = (TextView) findViewById(R.id.textViewPlan3);
-//        TextView tv4 = (TextView) findViewById(R.id.textViewPlan4);
-//        TextView tv5 = (TextView) findViewById(R.id.textViewPlan5);
-//        TextView tv6 = (TextView) findViewById(R.id.textViewPlan6);
-//        TextView tv7 = (TextView) findViewById(R.id.textViewPlan7);
-
-        boolean planCompleted = true;
-        Plan plan = myPlans.get(currDate);
-        for(Object o: plan.activity) {
-            if (o.getClass() == Activity.class) {
-                Activity plannedActivity = (Activity) o;
-                List<Activity> currActivities = myActivities.get(currDate);
-                boolean plannedActivityCompleted = false;
-                for (Activity activity : currActivities) {
-                    if (isFinishedActivity(activity, plannedActivity)) {
-                        plannedActivityCompleted = true;
-                        break;
-                    }
-                }
-                if (!plannedActivityCompleted) {
-                    planCompleted = false;
-                    break;
-                }
-            }
-        }
-        TextView tv1 = (TextView) findViewById(R.id.textViewPlan1);
-//            ImageView imageViewCheckOn = (ImageView) findViewById(R.id.imageView2);
-        if(planCompleted) {
-            tv1.setText(currDate + " completed");
-        }
-        else{
-            tv1.setText(currDate + " not completed");
-        }
-
-
-    }
+//    public void updatePlanStatus() {
+//        SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
+//        String currDate = sdf.format(cal.getTime());
+////        TextView tv2 = (TextView) findViewById(R.id.textViewPlan2);
+////        TextView tv3 = (TextView) findViewById(R.id.textViewPlan3);
+////        TextView tv4 = (TextView) findViewById(R.id.textViewPlan4);
+////        TextView tv5 = (TextView) findViewById(R.id.textViewPlan5);
+////        TextView tv6 = (TextView) findViewById(R.id.textViewPlan6);
+////        TextView tv7 = (TextView) findViewById(R.id.textViewPlan7);
+//
+//        boolean planCompleted = true;
+//        Plan plan = myPlans.get(currDate);
+//        for(Object o: plan.activity) {
+//            if (o.getClass() == Activity.class) {
+//                Activity plannedActivity = (Activity) o;
+//                List<Activity> currActivities = myActivities.get(currDate);
+//                boolean plannedActivityCompleted = false;
+//                for (Activity activity : currActivities) {
+//                    if (isFinishedActivity(activity, plannedActivity)) {
+//                        plannedActivityCompleted = true;
+//                        break;
+//                    }
+//                }
+//                if (!plannedActivityCompleted) {
+//                    planCompleted = false;
+//                    break;
+//                }
+//            }
+//        }
+//        TextView tv1 = (TextView) findViewById(R.id.textViewPlan1);
+////            ImageView imageViewCheckOn = (ImageView) findViewById(R.id.imageView2);
+//        if(planCompleted) {
+//            tv1.setText(currDate + " completed");
+//        }
+//        else{
+//            tv1.setText(currDate + " not completed");
+//        }
+//
+//
+//    }
 
     // return true is a fulfills plan b
     public boolean isFinishedActivity(Activity a, Activity b) {
@@ -204,7 +217,7 @@ public class ProgressActivity extends AppCompatActivity {
             ProgressActivity.this.myPlans = myPlans;
             ProgressActivity.this.myFootsteps = myFootsteps;
 
-            ProgressActivity.this.updateFootstepBar();
+//            ProgressActivity.this.updateFootstepBar();
             ProgressActivity.this.updatePlanStatus();
 
 
