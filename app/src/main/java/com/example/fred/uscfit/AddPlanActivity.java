@@ -1,13 +1,16 @@
 package com.example.fred.uscfit;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.util.Calendar;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -28,11 +31,10 @@ import com.example.Plan;
 import com.example.Sport;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.Calendar;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -50,6 +52,8 @@ public class AddPlanActivity extends AppCompatActivity {
     private Timestamp planTime = null;
     private int index = 0;
     private Calendar today = null;
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -337,6 +341,25 @@ public class AddPlanActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             dbController.addPlan(email, plan);
+            alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            for(Object obj : plan.activity){
+                Activity adj = (Activity) obj;
+                Calendar calendar;
+                if(!adj.name.equals("footsteps")) {
+                    long real_time = adj.start.getSeconds()-10800;
+
+                    calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(real_time*1000);
+
+                    Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+                    intent.putExtra("name",adj.name);
+                    alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP,
+                            calendar.getTimeInMillis(), alarmIntent);
+                }
+            }
+
             return true;
         }
 
