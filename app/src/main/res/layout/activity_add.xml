@@ -47,13 +47,13 @@
                     android:layout_height="match_parent"
                     android:hint="hr/min"
                     android:textSize="12pt" />
+
                 <Button
                     android:id="@+id/show_time_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Select Time"
-                    />
+                    android:text="Select Start Time"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -68,13 +68,13 @@
                     android:layout_height="match_parent"
                     android:hint="hr/min"
                     android:textSize="12pt" />
+
                 <Button
                     android:id="@+id/show_time_picker_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Select Time"
-                    />
+                    android:text="Select End Time"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
