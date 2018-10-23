@@ -37,6 +37,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private LinearLayout mAddPlanLayout;
     private LinearLayout mAddActivityLayout;
     private LinearLayout mCheckProgress;
+
+    private Button mProfileBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,10 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         mCheckProgress = findViewById(R.id.progressLayout);
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+        mProfileBtn = findViewById(R.id.profile_btn);
+
 
         // initialize step coutner
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);

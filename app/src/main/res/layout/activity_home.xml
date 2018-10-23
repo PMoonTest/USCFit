@@ -201,6 +201,37 @@
                 android:layout_weight="1"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/profile_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/profile_button"
+                    android:layout_alignParentEnd="true"
+                    android:elevation="1dp"
+                    >
+
+                </Button>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/profile"
+                    android:elevation="2dp"
+                    android:layout_alignParentEnd="true"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 <!--    <LinearLayout
