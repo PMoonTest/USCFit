@@ -71,7 +71,10 @@
             android:name=".ProgressActivity"
             android:label="Progress"
             />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile"
+            />
     </application>
 
 </manifest>
