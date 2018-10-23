@@ -115,13 +115,16 @@ public class ProfileActivity extends AppCompatActivity {
                     double calorieSum = this.getCalories(activity.name, activity.start, activity.end);
                     DecimalFormat calorieSumFormat = new DecimalFormat("#0.00");
 
-                    myActivities.put("total calories: " + calorieSumFormat.format(calorieSum) + "," + startDate + " - " + endDate, activity);
+                    myActivities.put("total calories: " + calorieSumFormat.format(calorieSum) + " cal," + startDate + " - " + endDate, activity);
                 }
 
             }
 
             for(String key : myFootsteps.keySet()) {
-                sb.append(myFootsteps.get(key).name + ", " + Long.toString(myFootsteps.get(key).value) + " steps, " + "\n " + key + "\n\n");
+                DecimalFormat calorieSumFormat = new DecimalFormat("#0.00");
+                double calorieSum = this.getFootstepCalories(myFootsteps.get(key).value);
+                sb.append(myFootsteps.get(key).name + ", " + Long.toString(myFootsteps.get(key).value) + " steps, total calories: " + calorieSumFormat.format(calorieSum)
+                        + " cal\n " + key + "\n\n");
             }
 
             for(String key : myActivities.keySet()) {
@@ -129,6 +132,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             this.allActivitiesContent = sb.toString();
+        }
+
+        private double getFootstepCalories(long numFootsteps) {
+            return 0.2 * numFootsteps;
         }
 
         private double getCalories(String name, Timestamp start, Timestamp end) {
