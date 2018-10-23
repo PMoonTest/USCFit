@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
 
         // initialize step coutner
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         PackageManager packageManager = getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER) && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR)) {
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
