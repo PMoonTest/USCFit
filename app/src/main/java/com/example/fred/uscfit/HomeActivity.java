@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -30,13 +31,16 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private TextView mWelcomeMessage;
     private String mEmail;
     private Button footStepBtn;
-    private SensorManager sensorManager;
     private String mStepNum;
 
     private LinearLayout mAddSportLayout;
     private LinearLayout mAddPlanLayout;
     private LinearLayout mAddActivityLayout;
     private LinearLayout mCheckProgress;
+
+    private SensorManager mSensorManager;
+    private boolean hasStepcounterSensor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,30 +59,40 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // initialize step coutner
-        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        PackageManager packageManager = getPackageManager();
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER) && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR)) {
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            hasStepcounterSensor = true;
+        } else {
+            Toast.makeText(this, "Step counter sensor not found", Toast.LENGTH_SHORT).show();
+            hasStepcounterSensor = false;
+        }
         footStepBtn = findViewById(R.id.footstepBtn);
         mStepNum = "0";
-        footStepBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button b = (Button)v;
-                String text = b.getText().toString();
-                if(text.equals(getString(R.string.footstep_btn_text))){
-                    mStepNum = String.valueOf(Long.parseLong(mStepNum)+getRandomStep());
-                    b.setText(mStepNum);
+        // initialize step coutner
+        if(!hasStepcounterSensor) {
+            footStepBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button b = (Button)v;
+                    String text = b.getText().toString();
+                    if(text.equals(getString(R.string.footstep_btn_text))){
+                        mStepNum = String.valueOf(Long.parseLong(mStepNum)+getRandomStep());
+                        b.setText(mStepNum);
+                    }
+                    else{
+                        b.setText(getString(R.string.footstep_btn_text));
+                    }
                 }
-                else{
-                    b.setText(getString(R.string.footstep_btn_text));
-                }
-            }
-        });
-        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if(sensor != null){
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+            });
         }
-        else{
-            Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show();
+        else {
+            Sensor countSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            if (countSensor != null) {
+                mSensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+            } else {
+                Toast.makeText(this, "Sensor not found", Toast.LENGTH_SHORT).show();
+            }
         }
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -106,10 +120,6 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(intent);
             }
         });
-        mAddSportLayout.setOnTouchListener(onTouchListener);
-        mAddActivityLayout.setOnTouchListener(onTouchListener);
-        mAddPlanLayout.setOnTouchListener(onTouchListener);
-        mCheckProgress.setOnTouchListener(onTouchListener);
 
         mAddPlanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,16 +159,21 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        mStepNum = String.valueOf(event.values[0]);
-        //startCounterBtn.setText(String.valueOf(event.values[0]));
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        switch (sensorEvent.sensor.getType()) {
+            case Sensor.TYPE_STEP_COUNTER:
+                footStepBtn = findViewById(R.id.footstepBtn);
+                footStepBtn.setText(String.valueOf(sensorEvent.values[0]));
+                break;
 
+        }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 
     private long getRandomStep(){
         float minVal = 1.0f;
