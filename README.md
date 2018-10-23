@@ -11,7 +11,13 @@
 1. Follow the regular setup steps for Android Projects. 
 
 
-2. The emilator version for testing purposes would be: **Nexus 5X API 28 (Android 9, API28)**. 
+2. The emulator version for testing purposes would be: **Nexus 5X API 28 (Android 9, API28)**. 
+
+3. If you need a user that's already filled with information, here it is: 
+
+Username: siyuanx@usc.edu
+
+Password: 23444
 
 
 - **Detailed Steps**:
@@ -81,5 +87,7 @@ The following points explain the different core functionalities location in **Ho
 8. Profile Page 
 
 <img width="53" alt="profile_btn" src="https://user-images.githubusercontent.com/22974252/47329899-2d7e7480-d62b-11e8-8776-6d20243400b1.png">
+
+<img width="399" alt="profile" src="https://user-images.githubusercontent.com/22974252/47334405-a685c800-d63b-11e8-9dd3-498a7a3b660c.png">
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where the user can view user's sports and their corresponding calories per hour. It will also include user's activities and all their corresponding calories consumed. 
