@@ -3,24 +3,15 @@ package com.example.fred.uscfit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.media.Image;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.ContactsContract;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,7 +22,6 @@ import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.db.DBController;
-import com.google.api.Distribution;
 import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
@@ -82,6 +72,7 @@ public class ProgressActivity extends AppCompatActivity {
         boolean weeklyPlanCompleted = true;
 
         Calendar currCal = cal;
+        currCal.add(Calendar.DAY_OF_MONTH, 1);
         for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
             if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
                 continue;
@@ -132,6 +123,7 @@ public class ProgressActivity extends AppCompatActivity {
                 targetStep = targetFootstep.value;
             }
             double footstepProgress = (double) actualStep/targetStep * 100;
+            if(actualStep == 0 && targetStep == 0) footstepProgress = 100;
             childProgressBar.setProgress((int)footstepProgress);
 
             // get plan details

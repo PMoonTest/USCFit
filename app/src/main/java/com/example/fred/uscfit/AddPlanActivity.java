@@ -191,7 +191,7 @@ public class AddPlanActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        activityList.get(currIndex).end = new Timestamp(new Date(mYear, mMonth, mDayOfMonth, hourOfDay, minute));
+                        activityList.get(currIndex).end = new Timestamp(new Date(mYear-1900, mMonth, mDayOfMonth, hourOfDay, minute));
                     }
                 }, mHour, mMinute, false);
                 endDate.hide();

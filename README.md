@@ -27,13 +27,15 @@
 
     b. If the user hasn't registered his/her email before, then the app will send his/her email and password to backend and allows for user login. 
 
-2. When the user adds an activity (in both **Add Activity** and **Add Plan**), make sure to select **OK** after picking the start/end time. Otherwise the app will not allow for submission. 
+2. After user logs in, make sure you add a sport into your account! 
 
-3. After user adds a plan, user can click on the progress page and will see the progress with badges.
+3. When the user adds an activity (in both **Add Activity** and **Add Plan**), make sure to select **OK** after picking the start/end time. Otherwise the app will not allow for submission. 
 
-4. After user adds an activity/plan, user can click on the progress button on bottom right, and you will see a list of all sports, activities and their corresponding calorie consumptions. 
+4. After user adds a plan, user can click on the progress page (expect 10 seconds for this page to load, so just be patient!) and will see the progress with badges.
 
-5. When the user clicks on the **Footstep** button on the top right corner, you will see the number of footsteps taken today. If you click on it again, it will resume to button mode. 
+5. After user adds an activity/plan, user can click on the progress button on bottom right, and you will see a list of all sports, activities and their corresponding calorie consumptions. 
+
+6. When the user clicks on the **Footstep** button on the top right corner, you will see the number of footsteps taken today. If you click on it again, it will resume to button mode. 
 
 - **Detailed Page Information**:
 1. Login Page 

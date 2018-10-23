@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -217,8 +218,9 @@ public class DBController {
         Map<String,Object> plans = new HashMap<>();
         plans.put("date", plan.date);
         plans.put("name",plan.name);
-        db.collection("Users").document(email).collection("Plans").document(plan.name).set(plan);
-        db.collection("Users").document(email).collection("Plans").document(plan.name).update(plans);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+        db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).set(plan);
+        db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).update(plans);
         for (int i = 0; i < plan.activity.size(); i++){
             Activity ac = (Activity)plan.activity.get(i);
             if(!ac.name.equals("footsteps")) {
@@ -227,7 +229,7 @@ public class DBController {
                 data.put("end", ac.end);
                 data.put("name", ac.name);
 
-                db.collection("Users").document(email).collection("Plans").document(plan.name).collection("Activities").add(data);
+                db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).collection("Activities").add(data);
             }
             else{
                 Footstep ft = (Footstep) plan.activity.get(i);
@@ -236,7 +238,7 @@ public class DBController {
                 data.put("value", ft.value);
                 data.put("name", ft.name);
 
-                db.collection("Users").document(email).collection("Plans").document(plan.name).collection("Activities").add(data);
+                db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).collection("Activities").add(data);
 
             }
         }
