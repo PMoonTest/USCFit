@@ -227,12 +227,12 @@ public class ProgressActivity extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
-            for(int i = 0; i<3; i++) {
+            for(int i = 0; i<7; i++) {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);
                 String planName = sdf.format(calendar.getTime());
                 Log.d(TAG, "doInBackground: planName" + planName );
                 Plan currPlan = dbController.getPlan(mEmail, planName);
-                if(currPlan != null) {
+                if(currPlan.name != null) {
                     myPlans.put(planName, currPlan);
                 }
             }
