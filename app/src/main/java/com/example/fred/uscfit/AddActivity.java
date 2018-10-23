@@ -1,6 +1,7 @@
 package com.example.fred.uscfit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -241,7 +242,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 StringBuilder sb = new StringBuilder();
-                sb.append(monthOfYear).append("/").append(dayOfMonth).append("/").append(year);
+                sb.append(monthOfYear+1).append("/").append(dayOfMonth).append("/").append(year);
                 mDate.setText(sb.toString());
                 AddActivity.year = year;
                 AddActivity.month = monthOfYear;
@@ -285,7 +286,12 @@ public class AddActivity extends AppCompatActivity {
                     Timestamp endTimeStamp = new Timestamp(activityEndDate.getTime());
                     com.example.Activity act = new com.example.Activity(mActivityName.getText().toString(), startTimeStamp, endTimeStamp);
                     dbController.addActivity(mEmail, act);
-                    Toast.makeText(v.getContext(), "activity has been submitted!", Toast.LENGTH_LONG);
+                    //Toast.makeText(v.getContext(), "activity has been submitted!", Toast.LENGTH_LONG).show();
+                    showAlertWhenValid();
+                    mActivityName.setText("");
+                    mStartTime.setText("");
+                    mEndTime.setText("");
+                    mDate.setText("");
                 }
 
             }
@@ -404,5 +410,15 @@ public class AddActivity extends AppCompatActivity {
         return userSports;
     }
 
+    // shows alert box when the submission is successful
+    private void showAlertWhenValid() {
+        // when the user input is invalid (when they didn't input name or something)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Message");
+        builder.setMessage("Submit Successful!");
+        builder.setPositiveButton("OK", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }
