@@ -15,12 +15,23 @@
 
 3. If you need a user that's already filled with information, here it is: 
 
-Username: siyuanx@usc.edu
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Username: siyuanx@usc.edu
 
-Password: 23444
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: 23444
 
+- **Detailed Steps**
 
-- **Detailed Steps**:
+1. When the user first logs in (assuming it's a new user), he/she should add a sport. 
+
+2. When the user adds an activity (in both **Add Activity** and **Add Plan**), make sure to select **OK** after picking the start/end time. Otherwise the app will not allow for submission. 
+
+3. After user adds a plan, user can click on the progress page and will see the progress with badges.
+
+4. After user adds an activity/plan, user can click on the progress button on bottom right, and you will see a list of all sports, activities and their corresponding calorie consumptions. 
+
+5. When the user clicks on the **Footstep** button on the top right corner, you will see the number of footsteps taken today. If you click on it again, it will resume to button mode. 
+
+- **Detailed Page Information**:
 1. Login Page 
 
 <img width="399" alt="login" src="https://user-images.githubusercontent.com/22974252/47329417-7a614b80-d629-11e8-955c-77317ac84b91.png">
