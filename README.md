@@ -15,9 +15,9 @@
 
 3. If you need a user that's already filled with information, here it is: 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Username: siyuanx@usc.edu
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Username: haozhech@usc.edu
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: 23444
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Password: 123456
 
 - **Detailed Steps**
 
