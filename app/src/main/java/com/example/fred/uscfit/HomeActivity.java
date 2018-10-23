@@ -38,6 +38,8 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
     private LinearLayout mAddActivityLayout;
     private LinearLayout mCheckProgress;
 
+    private Button mProfileBtn;
+
     private SensorManager mSensorManager;
     private boolean hasStepcounterSensor;
 
@@ -59,6 +61,12 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         //BottomNavigationView navigation = findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+
+        mProfileBtn = findViewById(R.id.profile_btn);
+
+
+        // initialize step coutner
+        sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         PackageManager packageManager = getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_COUNTER) && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_STEP_DETECTOR)) {
             mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -120,6 +128,10 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                 startActivity(intent);
             }
         });
+        mAddSportLayout.setOnTouchListener(onTouchListener);
+        mAddActivityLayout.setOnTouchListener(onTouchListener);
+        mAddPlanLayout.setOnTouchListener(onTouchListener);
+        mCheckProgress.setOnTouchListener(onTouchListener);
 
         mAddPlanLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +189,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     private long getRandomStep(){
         float minVal = 1.0f;
-        float maxVal = 99.0f;
-
+        float maxVal = 20.0f;
         Random rand = new Random();
 
         return (long)(rand.nextFloat() * (maxVal - minVal) + minVal);

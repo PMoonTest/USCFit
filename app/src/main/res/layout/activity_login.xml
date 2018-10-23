@@ -20,6 +20,12 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/icon"
+        />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -29,12 +35,25 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="30dp"
+            >
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal"
+                >
 
+
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/profile"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--/>-->
                 <AutoCompleteTextView
                     android:id="@+id/email"
                     android:layout_width="match_parent"
@@ -48,8 +67,17 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:orientation="horizontal"
+                >
 
+                <!--<android.support.v7.widget.AppCompatImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/password"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--/>-->
                 <EditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"

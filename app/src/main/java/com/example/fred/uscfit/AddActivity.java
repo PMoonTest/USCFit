@@ -25,8 +25,10 @@ import com.example.Sport;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -77,10 +79,21 @@ public class AddActivity extends AppCompatActivity {
     private GetAllSports mGetAllSports;
 
     private static ArrayAdapter<String> dataAdapter;
+    private static AddActivityAdapter loadingAdapter;
+    private static AddActivityAdapter sportAdapter;
 
     private static List<String> userSports;
 
     final Context that = this;
+
+    private static Spinner spinner;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //mActivityName.performClick();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +111,7 @@ public class AddActivity extends AppCompatActivity {
 
         mActivityName = findViewById(R.id.activity_name);
 
-        final Spinner spinner = findViewById(R.id.sports_dropdown_menu);
-
+        spinner = findViewById(R.id.sports_dropdown_menu);
         // format input and update activity name
         TextWatcher watcher = new TextWatcher() {
 
@@ -131,9 +143,11 @@ public class AddActivity extends AppCompatActivity {
         mActivityName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userSports = mGetAllSports.getSports();
-                dataAdapter = new ArrayAdapter<>(that, android.R.layout.simple_spinner_item, userSports);
-                spinner.setAdapter(dataAdapter);
+//                if(userSports == null) {
+//                    userSports = mGetAllSports.getSports();
+//                    dataAdapter = new ArrayAdapter<>(that, android.R.layout.simple_spinner_item, userSports);
+//                    spinner.setAdapter(dataAdapter);
+//                }
             }
         });
 
@@ -353,16 +367,31 @@ public class AddActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params){
             this.sports = dbController.getAllSports(this.mEmail);
-            if(sports == null || sports.size() == 0) return false;
+            String[] loading = {"1"};
+            loadingAdapter = new AddActivityAdapter(that, Arrays.asList(loading));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spinner.setAdapter(loadingAdapter);
+                }
+            });
             return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            spinner = findViewById(R.id.sports_dropdown_menu);
             for(Sport sport : this.sports)
             {
                 result.add(sport.name);
             }
+            sportAdapter = new AddActivityAdapter(that, result);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    spinner.setAdapter(sportAdapter);
+                }
+            });
         }
 
         public List<String> getSports()
@@ -370,5 +399,10 @@ public class AddActivity extends AppCompatActivity {
             return this.result;
         }
     }
+
+    public static List<String> getUserSports(){
+        return userSports;
+    }
+
 
 }
