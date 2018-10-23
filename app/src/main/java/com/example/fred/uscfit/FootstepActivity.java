@@ -101,6 +101,7 @@ public class FootstepActivity extends AppCompatActivity {
 
     // generate alert box with customized title and message
     private void alert(String title, String msg) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(msg)
                 .setTitle(title);

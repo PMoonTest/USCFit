@@ -67,7 +67,11 @@
         <activity
             android:name=".AddActivity"
             android:label="Add Activity" />
-        <activity android:name=".ProgressActivity"></activity>
+        <activity
+            android:name=".ProgressActivity"
+            android:label="Progress"
+            />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>
