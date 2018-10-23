@@ -23,6 +23,10 @@
 
 1. When the user first logs in (assuming it's a new user), he/she should add a sport. 
 
+    a. If the user has registered his/her email before, and the password is correct, then the user will be redirected to the user homepage. If the password is incorrect, the app will stay on the original page, and the user will be notified of the wrong password. 
+
+    b. If the user hasn't registered his/her email before, then the app will send his/her email and password to backend and allows for user login. 
+
 2. When the user adds an activity (in both **Add Activity** and **Add Plan**), make sure to select **OK** after picking the start/end time. Otherwise the app will not allow for submission. 
 
 3. After user adds a plan, user can click on the progress page and will see the progress with badges.
