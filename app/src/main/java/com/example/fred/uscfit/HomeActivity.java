@@ -162,8 +162,7 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
 
     private long getRandomStep(){
         float minVal = 1.0f;
-        float maxVal = 99.0f;
-
+        float maxVal = 20.0f;
         Random rand = new Random();
 
         return (long)(rand.nextFloat() * (maxVal - minVal) + minVal);
