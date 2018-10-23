@@ -28,6 +28,8 @@
 
 2. Home Page 
 
+<img width="399" alt="home_page" src="https://user-images.githubusercontent.com/22974252/47329474-b72d4280-d629-11e8-8a80-66e9a37e9c61.png">
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is the place where user gain access to all core functionalities of this application, which include **Footstep**, **Add Activity**, **Add Sport**, **Add Plan**, **Progress**, and **User Activity and Plan Profile**. 
 
 The following points explain the different core functionalities location in **Home Page**: 
@@ -35,24 +37,49 @@ The following points explain the different core functionalities location in **Ho
 
 3. Footstep Button 
 
+<img width="104" alt="foot_step" src="https://user-images.githubusercontent.com/22974252/47329523-e3e15a00-d629-11e8-9d54-37dec2214cdd.png">
+
+<img width="96" alt="foot_step2" src="https://user-images.githubusercontent.com/22974252/47329554-070c0980-d62a-11e8-989d-b2c092ce699a.png">
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On the top right corner, user can click on the Footstep button to access the daily footstep taken. 
 
 
-4. Add Activity Page 
+4. Add Activity Page
+
+<img width="81" alt="add_activity_btn" src="https://user-images.githubusercontent.com/22974252/47329581-2014ba80-d62a-11e8-9df9-69e7d5013b38.png">
+
+<img width="399" alt="add_activity" src="https://user-images.githubusercontent.com/22974252/47329606-33278a80-d62a-11e8-976b-627854030c6c.png"> 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where the user can add **finished** activities for calorie calculation. The user can add activities that is already finished, with starting and ending time so that our system can calculate the corresponding calorie. 
 
+5. Add Sport Page 
 
-5. Add Plan Page 
+<img width="79" alt="add_sport" src="https://user-images.githubusercontent.com/22974252/47329660-7124ae80-d62a-11e8-9277-515adc17825c.png">
+
+<img width="399" alt="add_sport" src="https://user-images.githubusercontent.com/22974252/47329678-83065180-d62a-11e8-8491-7c26cfe46dd1.png">
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where user can add new sport and its corresponding calorie per hour into his/her account. 
+
+6. Add Plan Page 
+
+<img width="80" alt="add_plan_btn" src="https://user-images.githubusercontent.com/22974252/47329721-adf0a580-d62a-11e8-922c-b44dd08d32be.png">
+
+<img width="399" alt="add_plan" src="https://user-images.githubusercontent.com/22974252/47329750-bf39b200-d62a-11e8-99ac-d8577e07a143.png">
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where the user can add **future** daily plan and activities. A plan contains multiple activities for **one single day**, and user may add activities with starting and ending time of the plan date. 
 
 
-6. Progress Page 
+7. Progress Page 
+
+<img width="78" alt="progress_btn" src="https://user-images.githubusercontent.com/22974252/47329821-e98b6f80-d62a-11e8-9608-d8544df917e5.png">
+
+<img width="399" alt="progress" src="https://user-images.githubusercontent.com/22974252/47329874-19d30e00-d62b-11e8-890d-f0228ee3e22b.png">
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where the user can view the workout plan progress. If the user user finsihes one daily plan, 1 badge will be awarded. If the user has finished 7 consecutive daily plans, he/she will receive a large badge. 
 
 
-7. Profile Page 
+8. Profile Page 
+
+<img width="53" alt="profile_btn" src="https://user-images.githubusercontent.com/22974252/47329899-2d7e7480-d62b-11e8-8776-6d20243400b1.png">
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is where the user can view user's sports and their corresponding calories per hour. It will also include user's activities and all their corresponding calories consumed. 
