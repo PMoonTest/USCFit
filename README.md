@@ -17,6 +17,8 @@
 - **Detailed Steps**:
 1. Login Page 
 
+<img width="399" alt="login" src="https://user-images.githubusercontent.com/22974252/47329417-7a614b80-d629-11e8-955c-77317ac84b91.png">
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When the user types in the email and password, there would be two cases: 
 
     a. If the user has registered his/her email before, and the password is correct, then the user will be redirected to the user homepage. If the password is incorrect, the app will stay on the original page, and the user will be notified of the wrong password. 
