@@ -10,6 +10,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
     buildTypes {
         release {
@@ -38,5 +42,8 @@ dependencies {
     implementation "com.android.support:support-compat:28.0.0"
     testImplementation 'io.cucumber:cucumber-java:4.0.0'
     testImplementation 'io.cucumber:cucumber-junit:4.0.0'
+
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
