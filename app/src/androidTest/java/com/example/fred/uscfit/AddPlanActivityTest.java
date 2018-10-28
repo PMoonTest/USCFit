@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
+
 public class AddPlanActivityTest {
 
     @Rule
@@ -32,7 +34,6 @@ public class AddPlanActivityTest {
         planNameInput1 = (EditText) mActivity1.findViewById(R.id.planNameInput);
         addActivityBtn = (FloatingActionButton) mActivity1.findViewById(R.id.addActivityBtn);
         submitBtn = (Button) mActivity1.findViewById(R.id.submitBtn);
-
     }
 
 
@@ -41,10 +42,8 @@ public class AddPlanActivityTest {
     public void submitCompleteTest() {
         planNameInput1.requestFocus();
         planNameInput1.setText("My Test Plan");
-
-        addActivityBtn.callOnClick();
-
-        submitBtn.callOnClick();
+        assertTrue(addActivityBtn.callOnClick());
+        assertTrue(submitBtn.callOnClick());
     }
 
     @Test
@@ -53,23 +52,23 @@ public class AddPlanActivityTest {
         planNameInput1.requestFocus();
         planNameInput1.setText("My Test Plan");
 
-        addActivityBtn.callOnClick();
+        assertTrue(addActivityBtn.callOnClick());
 
 
-        submitBtn.callOnClick();
+        assertTrue(submitBtn.callOnClick());
     }
 
     @Test
     @UiThreadTest
     // submits an empty form
     public void invalidSubmitTest() {
-        submitBtn.callOnClick();
+        assertTrue(submitBtn.callOnClick());
     }
 
     @Test
     @UiThreadTest
     public void addActivityTest() {
-        addActivityBtn.callOnClick();
+        assertTrue(addActivityBtn.callOnClick());
     }
 
     @Test
@@ -77,7 +76,7 @@ public class AddPlanActivityTest {
     // When the user clicks on back button
     public void clickBackTest() {
         KeyEvent kdown = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK);
-        mActivity1.dispatchKeyEvent(kdown);
+        assertTrue(mActivity1.dispatchKeyEvent(kdown));
     }
 
 
