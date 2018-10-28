@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class LoginActivityTest {
 
     @Rule
@@ -37,6 +40,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("13444");
         loginButton.callOnClick();
+        assertTrue(mActivity.loginSuccessful());
     }
 
     @Test
@@ -45,8 +49,9 @@ public class LoginActivityTest {
         username.requestFocus();
         username.setText("siyuanx@usc.edu");
         password.requestFocus();
-        password.setText("12345678910123123123");
+        password.setText("abcderf");
         loginButton.callOnClick();
+        assertTrue(mActivity.loginSuccessful());
     }
 
     @Test
@@ -57,6 +62,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("");
         loginButton.callOnClick();
+        assertFalse(mActivity.loginSuccessful());
     }
 
     @Test
@@ -67,6 +73,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("13444");
         loginButton.callOnClick();
+        assertFalse(mActivity.loginSuccessful());
     }
 
     @Test
@@ -77,6 +84,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("13444");
         loginButton.callOnClick();
+        assertFalse(mActivity.loginSuccessful());
     }
 
     @Test
@@ -88,6 +96,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("123");
         loginButton.callOnClick();
+        assertFalse(mActivity.loginSuccessful());
     }
 
     @Test
@@ -98,6 +107,7 @@ public class LoginActivityTest {
         password.requestFocus();
         password.setText("12345");
         loginButton.callOnClick();
+        assertTrue(mActivity.loginSuccessful());
     }
 
     @After
