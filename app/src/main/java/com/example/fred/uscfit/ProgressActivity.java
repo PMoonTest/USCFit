@@ -60,7 +60,7 @@ public class ProgressActivity extends AppCompatActivity {
         showProgress(true);
 
 
-        GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask((mEmail));
+        GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask(mEmail, this);
         mGetAllPlansTask.execute((Void) null);
 
     }
@@ -202,100 +202,25 @@ public class ProgressActivity extends AppCompatActivity {
         return true;
     }
 
-
-
-
-    public class GetAllPlansTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-
-        public GetAllPlansTask(String email) {
-            mEmail = email;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Map<String, Plan> myPlans = new HashMap<>();
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
-            for(int i = 0; i<7; i++) {
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-                String planName = sdf.format(calendar.getTime());
-                Log.d(TAG, "doInBackground: planName" + planName );
-                Plan currPlan = dbController.getPlan(mEmail, planName);
-                if(currPlan.name != null) {
-                    myPlans.put(planName, currPlan);
-                }
-            }
-            Log.d(TAG, "doInBackground: " + myPlans.size());
-
-            List<Object> allActivities = dbController.getAllActivity(mEmail);
-            Map<String, List<Activity>> myActivities = new HashMap<>();
-            Map<String, Footstep> myFootsteps = new HashMap<>();
-            for(Object o: allActivities) {
-                HashMap<String, Object> map = (HashMap<String, Object>) o;
-                if(map.get("name").equals("footsteps")) {
-                    Footstep footstep = new Footstep();
-                    footstep.name = "footsteps";
-                    footstep.date = (Timestamp) map.get("date");
-                    footstep.value = (Long) map.get("value");
-                    String currDate = sdf.format(footstep.date.toDate());
-                    myFootsteps.put(currDate, footstep);
-                }
-                else {
-                    Activity activity = new Activity();
-                    activity.name = (String) map.get("name");
-                    activity.start = (Timestamp)map.get("start");
-                    activity.end = (Timestamp)map.get("end");
-                    String currDate = sdf.format(activity.start.toDate());
-                    if(myActivities.containsKey(currDate)) {
-                        myActivities.get(currDate).add(activity);
-                    }
-                    else {
-                        List<Activity> newActivity = new ArrayList<>();
-                        newActivity.add(activity);
-                        myActivities.put(currDate, newActivity);
-                    }
-                }
-            }
-
-            ProgressActivity.this.myActivities = myActivities;
-            ProgressActivity.this.myPlans = myPlans;
-            ProgressActivity.this.myFootsteps = myFootsteps;
-
-//            ProgressActivity.this.updateFootstepBar();
-            ProgressActivity.this.updatePlanStatus();
-
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            showProgress(false);
-            if (success) {
-                // this means sport already exists
-//                alert("Oops...", "Sport category already exists.");
-//                ProgressActivity.this.updateFootstepBar();
-                return;
-            } else {
-                // sport doesn't exist
-                // all input is valid, now call DBController to insert sport
-//                dbController.addSports(getIntent().getStringExtra("email"), new Sport(sportName, calories));
-//                alert("Yeah!", "Successfully added sport category.");
-                return;
-            }
-        }
-
-
+    public void setMyActivities(Map<String, List<Activity>> myActivities) {
+        this.myActivities = myActivities;
     }
+
+    public void setMyPlans(Map<String, Plan> myPlans) {
+        this.myPlans = myPlans;
+    }
+
+    public void setMyFootsteps(Map<String, Footstep> myFootsteps) {
+        this.myFootsteps = myFootsteps;
+    }
+
+
 
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
