@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static boolean login;
     public static boolean isComplete = false;
     public final DBController db = new DBController();
+    private boolean cancel = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    public boolean loginSuccessful() {
+        return !cancel;
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
@@ -86,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
+        cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -111,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mPasswordView;
         }
 
-        if (cancel) {
+        if (!loginSuccessful()) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
