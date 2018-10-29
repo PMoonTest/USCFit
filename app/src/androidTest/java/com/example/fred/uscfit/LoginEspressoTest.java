@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -14,13 +13,10 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
