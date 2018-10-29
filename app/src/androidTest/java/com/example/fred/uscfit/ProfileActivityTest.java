@@ -1,14 +1,15 @@
 package com.example.fred.uscfit;
 
 import android.content.Intent;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.rule.ActivityTestRule;
 import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import androidx.test.annotation.UiThreadTest;
+import androidx.test.rule.ActivityTestRule;
 
 import static org.junit.Assert.assertTrue;
 
