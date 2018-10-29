@@ -3,52 +3,29 @@ package com.example.fred.uscfit;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.Activity;
-import com.example.Plan;
 import com.example.User;
 import com.example.db.DBController;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
@@ -74,25 +51,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public static boolean login;
     public static boolean isComplete = false;
     public final DBController db = new DBController();
+    private boolean cancel = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -106,49 +73,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
+    public boolean loginSuccessful() {
+        return !cancel;
     }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -156,10 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -168,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
+        cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
@@ -193,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mPasswordView;
         }
 
-        if (cancel) {
+        if (!loginSuccessful()) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
@@ -245,66 +168,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
 
-        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -323,88 +202,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-
-            // TODO: register the new account here.
-
-            // Create a reference to the cities collection
             CollectionReference usersRef = db.db.collection("Users");
-            //System.out.println(SystemClock.elapsedRealtime());
-//            Plan b = db.getPlan("siyuanx@usc.edu","2018_10_20");
-//            Activity a =(Activity)b.activity.get(0);
-//            System.out.println(a.start.getSeconds());
-            //System.out.println(a.name);
-            // Create a query against the collection.
-//            createNotificationChannel();
-//            Calendar activityStartDate = Calendar.getInstance();
-//            Activity a = new Activity();
-//            activityStartDate.set(Calendar.MONTH, 10);
-//            activityStartDate.set(Calendar.YEAR, 2018);
-//            activityStartDate.set(Calendar.DAY_OF_MONTH, 22);
-//            activityStartDate.set(Calendar.HOUR, 2);
-//            activityStartDate.set(Calendar.MINUTE, 42);
-//            Timestamp startTimeStamp = new Timestamp(activityStartDate.getTime());
-//            //System.out.println(startTimeStamp.getSeconds()-12*60*60);
-//            long real_time = startTimeStamp.getSeconds()-10800-12*60*60;
-//            System.out.println(real_time);
-//            AlarmManager alarmMgr;
-//            alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);;
-//            PendingIntent alarmIntent;
-////            Calendar calendar = Calendar.getInstance();
-////            calendar = Calendar.getInstance();
-////            calendar.setTimeInMillis(real_time*1000);
-////            calendar.setTimeInMillis(System.currentTimeMillis()+5000);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTimeInMillis(System.currentTimeMillis());
-//            calendar.set(Calendar.HOUR_OF_DAY, 0);
-//            calendar.set(Calendar.MINUTE, 5);
-//            System.out.println(calendar.getTimeInMillis());
-//            Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
-//            intent.putExtra("name","abc");
-//            intent.setAction("abc");
-//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//            alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-//
-//            alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
-//                    calendar.getTimeInMillis(), alarmIntent);
             Query query = usersRef.whereEqualTo("email", mEmail);
-            //List<User> users = new ArrayList<>();
-            //System.out.println(query.get());
-            //Task<QuerySnapshot> result =  query.get();
             isComplete = false;
             query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    //questionObject content = queryDocumentSnapshots.toObjects(questionObject.class);
                     List<User> users  = queryDocumentSnapshots.toObjects(User.class);
 
                     if (users.size() == 0){
                         login = true;
                         db.addNewUser(mEmail,mPassword);
-
-
                     }
                     else{
                         if(users.get(0).password.equals(mPassword)){
                             //next view
                             login = true;
-                            //System.out.println(login+"222");
-
-
                         }else{
                             login = false;
-                            //System.out.println(login+"222");
-                            //System.out.println("密码错误");
                         }
 
                     }
@@ -423,9 +238,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             while(!isComplete){
 
             }
-
-
-            //System.out.println(login + "111");
            return login;
         }
 
@@ -444,27 +256,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "my channel";
-            String description = "this is my channel";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("myid", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-
 }

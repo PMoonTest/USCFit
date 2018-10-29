@@ -4,8 +4,6 @@ import com.example.db.DBController;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -16,7 +14,12 @@ public class ExampleUnitTest {
 
     @Test
     public void testAddNewUser() {
-        db.addNewUser("zhixul0927@gmail.com","12345678");
+//        db.addNewUser("zhixul0927@gmail.com","12345678");
         //assertEquals(4, 2 + 2);
     }
+    @Test
+    public void helper() {
+//        AddPlanActivity activity = new AddPlanActivity();
+
+    };
 }
