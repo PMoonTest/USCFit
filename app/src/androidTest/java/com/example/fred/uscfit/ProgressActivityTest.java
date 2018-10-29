@@ -1,8 +1,7 @@
 package com.example.fred.uscfit;
 
 import android.content.Intent;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.rule.ActivityTestRule;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -22,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import androidx.test.rule.ActivityTestRule;
 
 public class ProgressActivityTest {
     @Rule
