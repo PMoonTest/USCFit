@@ -247,8 +247,8 @@ public class DBController {
                                     }
                                 });
 
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        Log.d(TAG,(String)document.getData().get("name"));
+                        // Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        // Log.d(TAG,(String)document.getData().get("name"));
                         a.name = (String)document.getData().get("name");
                         a.date = (Timestamp) document.getData().get("date");
 
