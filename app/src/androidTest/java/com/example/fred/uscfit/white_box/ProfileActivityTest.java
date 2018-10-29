@@ -1,7 +1,10 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
 import android.widget.TextView;
+
+import com.example.fred.uscfit.ProfileActivity;
+import com.example.fred.uscfit.R;
 
 import org.junit.After;
 import org.junit.Before;

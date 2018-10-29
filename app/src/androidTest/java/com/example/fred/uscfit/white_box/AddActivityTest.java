@@ -1,8 +1,11 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.fred.uscfit.AddActivity;
+import com.example.fred.uscfit.R;
 
 import org.junit.After;
 import org.junit.Before;

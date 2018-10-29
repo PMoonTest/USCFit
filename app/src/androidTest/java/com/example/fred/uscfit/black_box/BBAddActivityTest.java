@@ -1,16 +1,21 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.black_box;
 import android.content.Intent;
 
-import org.junit.*;
+import com.example.fred.uscfit.AddActivity;
+import com.example.fred.uscfit.R;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -40,7 +45,7 @@ public class BBAddActivityTest {
         Intent input = new Intent();
         input.putExtra("email", mEmail);
         mActivityRule.launchActivity(input);
-        onView(withId(R.id.email))
+        onView(ViewMatchers.withId(R.id.email))
                 .check(matches(withText(mEmail)));
         mActivityRule.finishActivity();
     }

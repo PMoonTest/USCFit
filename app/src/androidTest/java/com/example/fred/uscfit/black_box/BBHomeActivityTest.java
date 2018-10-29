@@ -1,4 +1,4 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.black_box;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.fred.uscfit.HomeActivity;
+import com.example.fred.uscfit.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -16,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -23,7 +27,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
@@ -64,7 +67,7 @@ public class BBHomeActivityTest {
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
 
 
-        onView(withId(R.id.addActivityLayout)).perform(click());
+        onView(ViewMatchers.withId(R.id.addActivityLayout)).perform(click());
 
         intended(toPackage("com.example.fred.uscfit"));
 

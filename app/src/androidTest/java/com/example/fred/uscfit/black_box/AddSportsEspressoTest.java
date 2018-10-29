@@ -1,6 +1,9 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.black_box;
 
 import android.content.Intent;
+
+import com.example.fred.uscfit.AddSportActivity;
+import com.example.fred.uscfit.R;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -8,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Random;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -30,7 +34,7 @@ public class AddSportsEspressoTest {
         Intent i = new Intent();
         i.putExtra("email","siyuanx@usc.edu");
         mActivityRule.launchActivity(i);
-        onView(withId(R.id.sportNameText)).perform(typeText("Running"));
+        onView(ViewMatchers.withId(R.id.sportNameText)).perform(typeText("Running"));
         onView(withId(R.id.caloriesText)).perform(typeText("300"));
         onView(withId(R.id.addSportBtn)).perform(click());
         //onView(withText("Successfully added sport category1."));

@@ -1,10 +1,13 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.fred.uscfit.AddPlanActivity;
+import com.example.fred.uscfit.R;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,16 +1,10 @@
-package com.example.fred.uscfit;
+package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
 
-import android.util.Log;
-import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-
 import com.example.Activity;
-import com.example.Footstep;
-import com.example.db.DBController;
+import com.example.fred.uscfit.GetAllPlansTask;
+import com.example.fred.uscfit.ProgressActivity;
 import com.google.firebase.Timestamp;
 
 import org.junit.Before;
@@ -18,9 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import androidx.test.rule.ActivityTestRule;
 
