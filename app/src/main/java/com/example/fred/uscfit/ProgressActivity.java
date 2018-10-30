@@ -24,6 +24,7 @@ import com.example.Plan;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,9 +53,20 @@ public class ProgressActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mEmail = intent.getStringExtra("email");
-        dbController = new DBController();
-        cal = Calendar.getInstance();
+        String dateStr = intent.getStringExtra("date");
         sdf = new SimpleDateFormat("yyyy_MM_dd");
+        if(dateStr == null || dateStr.length() == 0) {
+            cal = Calendar.getInstance();
+        }
+        else {
+            try {
+                cal = Calendar.getInstance();
+                cal.setTime(sdf.parse(dateStr));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        dbController = new DBController();
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         mLoadingView = findViewById(R.id.loadingProgress);
         showProgress(true);
