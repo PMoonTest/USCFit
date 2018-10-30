@@ -1,10 +1,12 @@
 package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
+import android.widget.TextView;
 
 import com.example.Activity;
 import com.example.fred.uscfit.GetAllPlansTask;
 import com.example.fred.uscfit.ProgressActivity;
+import com.example.fred.uscfit.R;
 import com.google.firebase.Timestamp;
 
 import org.junit.Before;
@@ -36,6 +38,8 @@ public class ProgressActivityTest {
     }
 
 
+
+
     @Test
     public void testProgress () throws Throwable {
         // create  a signal to let us know when our task is done.
@@ -47,9 +51,11 @@ public class ProgressActivityTest {
                 signal.countDown();
             }
         };
-
+        TextView mtTextView = mActivity.findViewById(R.id.textView1);
         myTask.execute();
         signal.await();
+        String res = mtTextView.getText().toString().toLowerCase();
+        assertTrue(res.contains("completed"));
 
     }
 

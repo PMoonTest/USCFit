@@ -77,13 +77,18 @@ public class ProgressActivity extends AppCompatActivity {
 
     }
 
+    public Calendar getCalendar() {
+        return cal;
+    }
+
 
     public void updatePlanStatus() {
         SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
         final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
         boolean weeklyPlanCompleted = true;
 
-        Calendar currCal = cal;
+        Calendar currCal = Calendar.getInstance();
+        currCal.setTime(cal.getTime());
         currCal.add(Calendar.DAY_OF_MONTH, 1);
         for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
             if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
