@@ -150,6 +150,10 @@ public class ProgressActivity extends AppCompatActivity {
                     Activity plannedActivity = (Activity) o;
                     List<Activity> currActivities = myActivities.get(currDate);
                     boolean plannedActivityCompleted = false;
+                    if(currActivities == null) {
+                        plancompleted = false;
+                        continue;
+                    }
                     for(Activity activity : currActivities) {
                         if(isFinishedActivity(activity, plannedActivity)) {
                             Log.d(TAG, "run: FINISHED PLAN");
