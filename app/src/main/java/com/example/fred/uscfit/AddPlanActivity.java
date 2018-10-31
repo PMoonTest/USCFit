@@ -339,6 +339,24 @@ public class AddPlanActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             dbController.addPlan(email, plan);
+            alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            for(Object obj : plan.activity){
+                Activity adj = (Activity) obj;
+                Calendar calendar;
+                if(!adj.name.equals("footsteps")) {
+                    long real_time = adj.start.getSeconds()-10800;
+
+                    calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(real_time*1000);
+
+                    Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+                    intent.putExtra("name",adj.name);
+                    alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP,
+                            calendar.getTimeInMillis(), alarmIntent);
+                }
+            }
             return true;
         }
 
