@@ -24,6 +24,7 @@ import com.example.Plan;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,9 +53,20 @@ public class ProgressActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mEmail = intent.getStringExtra("email");
-        dbController = new DBController();
-        cal = Calendar.getInstance();
+        String dateStr = intent.getStringExtra("date");
         sdf = new SimpleDateFormat("yyyy_MM_dd");
+        if(dateStr == null || dateStr.length() == 0) {
+            cal = Calendar.getInstance();
+        }
+        else {
+            try {
+                cal = Calendar.getInstance();
+                cal.setTime(sdf.parse(dateStr));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        dbController = new DBController();
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         mLoadingView = findViewById(R.id.loadingProgress);
         showProgress(true);
@@ -65,13 +77,18 @@ public class ProgressActivity extends AppCompatActivity {
 
     }
 
+    public Calendar getCalendar() {
+        return cal;
+    }
+
 
     public void updatePlanStatus() {
         SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
         final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
         boolean weeklyPlanCompleted = true;
 
-        Calendar currCal = cal;
+        Calendar currCal = Calendar.getInstance();
+        currCal.setTime(cal.getTime());
         currCal.add(Calendar.DAY_OF_MONTH, 1);
         for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
             if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
@@ -133,6 +150,10 @@ public class ProgressActivity extends AppCompatActivity {
                     Activity plannedActivity = (Activity) o;
                     List<Activity> currActivities = myActivities.get(currDate);
                     boolean plannedActivityCompleted = false;
+                    if(currActivities == null) {
+                        plancompleted = false;
+                        continue;
+                    }
                     for(Activity activity : currActivities) {
                         if(isFinishedActivity(activity, plannedActivity)) {
                             Log.d(TAG, "run: FINISHED PLAN");

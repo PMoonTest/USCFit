@@ -35,6 +35,7 @@ public class GetAllPlansTask  extends AsyncTask<Void, Void, Boolean> {
         dbController = new DBController();
         Map<String, Plan> myPlans = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(mActivity.getCalendar().getTime());
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
         for(int i = 0; i<7; i++) {

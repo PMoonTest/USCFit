@@ -179,6 +179,14 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public void checkProgress(View view) {
+        Intent intent = new Intent(this, ProgressActivity.class);
+        intent.putExtra("email", mEmail);
+        String date = "";
+        intent.putExtra("date", date);
+        startActivity(intent);
+    }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 

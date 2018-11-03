@@ -1,10 +1,12 @@
 package com.example.fred.uscfit.white_box;
 
 import android.content.Intent;
+import android.widget.TextView;
 
 import com.example.Activity;
 import com.example.fred.uscfit.GetAllPlansTask;
 import com.example.fred.uscfit.ProgressActivity;
+import com.example.fred.uscfit.R;
 import com.google.firebase.Timestamp;
 
 import org.junit.Before;
@@ -14,13 +16,14 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.concurrent.CountDownLatch;
 
+import static org.junit.Assert.assertTrue;
+
 import androidx.test.rule.ActivityTestRule;
 
 public class ProgressActivityTest {
     @Rule
     public ActivityTestRule<ProgressActivity> mProgressActivity = new ActivityTestRule<ProgressActivity>(ProgressActivity.class, false, false);
 
-    final CountDownLatch signal = new CountDownLatch(1);
     private ProgressActivity mActivity = null;
     private String testEmail = "testUser@usc.edu";
 
@@ -28,9 +31,13 @@ public class ProgressActivityTest {
     public void setUp() {
         Intent i = new Intent();
         i.putExtra("email", testEmail);
+        String date = "2018_10_28";
+        i.putExtra("date", date);
         mProgressActivity.launchActivity(i);
         mActivity = mProgressActivity.getActivity();
     }
+
+
 
 
     @Test
@@ -44,25 +51,12 @@ public class ProgressActivityTest {
                 signal.countDown();
             }
         };
-//        DBController dbController = new DBController();
-//        Calendar time_9am = Calendar.getInstance();
-//        time_9am.set(Calendar.HOUR_OF_DAY, 9);
-//        Calendar time_10am = Calendar.getInstance();
-//        time_10am.set(Calendar.HOUR_OF_DAY, 10);
-//        Activity activity1 = new Activity("running", new Timestamp(time_9am.getTime()), new Timestamp(time_10am.getTime()));
-//        dbController.addActivity(testEmail, activity1);
-
-
-
-
+        TextView mtTextView = mActivity.findViewById(R.id.textView1);
         myTask.execute();
-
-        /* The testing thread will wait here until the UI thread releases it
-         * above with the countDown() or 30 seconds passes and it times out.
-         */
         signal.await();
+        String res = mtTextView.getText().toString().toLowerCase();
+        assertTrue(res.contains("completed"));
 
-        // The task is done, and now you can assert some things!
     }
 
     @Test
@@ -77,10 +71,10 @@ public class ProgressActivityTest {
         Activity activity2 = new Activity("running", new Timestamp(time_9am.getTime()), new Timestamp(time_10am.getTime()));
         Activity activity3 = new Activity("swimming", new Timestamp(time_9am.getTime()), new Timestamp(time_10am.getTime()));
         Activity activity4 = new Activity("running", new Timestamp(time_9am.getTime()), new Timestamp(time_11am.getTime()));
-        mActivity.isFinishedActivity(activity1, activity2);
-        mActivity.isFinishedActivity(activity3, activity1);
-        mActivity.isFinishedActivity(activity4, activity1);
-        mActivity.isFinishedActivity(activity1, activity4);
+        assertTrue(mActivity.isFinishedActivity(activity1, activity2));
+        assertTrue(!mActivity.isFinishedActivity(activity3, activity1));
+        assertTrue(mActivity.isFinishedActivity(activity4, activity1));
+        assertTrue(!mActivity.isFinishedActivity(activity1, activity4));
 
     }
 
