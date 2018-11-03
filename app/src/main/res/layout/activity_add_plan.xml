@@ -41,6 +41,21 @@
                 android:inputType="textPersonName" />
 
             <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Footstep"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/footstepInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
                 android:id="@+id/planDateLavel"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"

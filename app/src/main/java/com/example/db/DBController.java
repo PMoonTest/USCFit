@@ -186,8 +186,8 @@ public class DBController {
         db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).set(plan);
         db.collection("Users").document(email).collection("Plans").document(sdf.format(plan.date.toDate())).update(plans);
         for (int i = 0; i < plan.activity.size(); i++){
-            Activity ac = (Activity)plan.activity.get(i);
-            if(!ac.name.equals("footsteps")) {
+            if(plan.activity.get(i) instanceof Activity) {
+                Activity ac = (Activity)plan.activity.get(i);
                 Map<String, Object> data = new HashMap<>();
                 data.put("start", ac.start);
                 data.put("end", ac.end);

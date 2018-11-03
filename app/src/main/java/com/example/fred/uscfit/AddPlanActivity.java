@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.Activity;
+import com.example.Footstep;
 import com.example.Plan;
 import com.example.Sport;
 import com.example.db.DBController;
@@ -67,8 +68,17 @@ public class AddPlanActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_plan);
 
+
+        today = Calendar.getInstance();
+        final int mYear = today.get(Calendar.YEAR);
+        final int mMonth = today.get(Calendar.MONTH);
+        final int mDayOfMonth = today.get(Calendar.DAY_OF_MONTH);
+        final int mHour = today.get(Calendar.HOUR_OF_DAY);
+        final int mMinute = today.get(Calendar.MINUTE);
+
         // handles case when submit button is clicked
         Button submitPlanBtn = (Button) findViewById(R.id.submitBtn);
+        final EditText footstepInput = (EditText) findViewById(R.id.footstepInput);
         submitPlanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,16 +103,22 @@ public class AddPlanActivity extends AppCompatActivity {
                     return;
                 }
 
+                Footstep planFootstep = new Footstep();
+                planFootstep.name = "footsteps";
+                planFootstep.date = new Timestamp(new Date(mYear, mMonth, mDayOfMonth));
+                planFootstep.value = (long) Long.parseLong(footstepInput.getText().toString());
+
                 plan.name = planName;
                 plan.date = planTime;
                 plan.activity = (ArrayList) activityList;
-
+                plan.activity.add(planFootstep);
 
                 AddPlan mAddPlan = new AddPlan(plan, getIntent().getStringExtra("email"));
                 mAddPlan.execute((Void) null);
                 showAlertWhenValid();
             }
         });
+
 
         // Adding new activities
         FloatingActionButton addActivityBtn = (FloatingActionButton) findViewById(R.id.addActivityBtn);
@@ -151,14 +167,6 @@ public class AddPlanActivity extends AppCompatActivity {
                 );
                 params1.addRule(RelativeLayout.ABOVE, planNameInput.getId());
                 spinner.setLayoutParams(params1);
-
-
-                today = Calendar.getInstance();
-                final int mYear = today.get(Calendar.YEAR);
-                final int mMonth = today.get(Calendar.MONTH);
-                final int mDayOfMonth = today.get(Calendar.DAY_OF_MONTH);
-                final int mHour = today.get(Calendar.HOUR_OF_DAY);
-                final int mMinute = today.get(Calendar.MINUTE);
 
                 final TimePickerDialog startDate = new TimePickerDialog(that, new TimePickerDialog.OnTimeSetListener() {
                     int currIndex = index;
@@ -239,6 +247,8 @@ public class AddPlanActivity extends AppCompatActivity {
                 index++;
             }
         });
+
+
     }
 
     // shows alert box when the data user inputs is invalid
