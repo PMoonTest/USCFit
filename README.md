@@ -7,6 +7,17 @@
  4. Siyuan Xu (siyuanx@usc.edu)
  5. Zhixu Li (zhixul@usc.edu)
 
+- **Improvements Made Since Project 2.3**
+
+1. The first improvement task of our team for this sprint is to add a **Footstep** text field functionality when adding a plan. Here is what we've got: 
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958367-87fec580-df87-11e8-8aa3-a190590c31ba.png">
+
+The effect of this improvement would be reflected in our progress section, where the bar shown in the screenshot would show a progress in terms of the footsteps completed. 
+
+<img width="291" alt="1" src="https://user-images.githubusercontent.com/22974252/47958395-3dca1400-df88-11e8-88c1-06c413d9258b.png">
+
+
 - **Setup Instructions**
 1. Follow the regular setup steps for Android Projects. 
 

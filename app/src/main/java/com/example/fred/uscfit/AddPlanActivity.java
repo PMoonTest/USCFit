@@ -103,15 +103,22 @@ public class AddPlanActivity extends AppCompatActivity {
                     return;
                 }
 
-                Footstep planFootstep = new Footstep();
-                planFootstep.name = "footsteps";
-                planFootstep.date = new Timestamp(new Date(mYear, mMonth, mDayOfMonth));
-                planFootstep.value = (long) Long.parseLong(footstepInput.getText().toString());
+                Footstep planFootstep = null;
+                if(footstepInput.getText().toString().length() != 0)
+                {
+                    planFootstep = new Footstep();
+                    planFootstep.name = "footsteps";
+                    planFootstep.date = new Timestamp(new Date(mYear, mMonth, mDayOfMonth));
+                    planFootstep.value = (long) Long.parseLong(footstepInput.getText().toString());
+                }
 
                 plan.name = planName;
                 plan.date = planTime;
                 plan.activity = (ArrayList) activityList;
-                plan.activity.add(planFootstep);
+                if(planFootstep!=null)
+                {
+                    plan.activity.add(planFootstep);
+                }
 
                 AddPlan mAddPlan = new AddPlan(plan, getIntent().getStringExtra("email"));
                 mAddPlan.execute((Void) null);
@@ -351,9 +358,9 @@ public class AddPlanActivity extends AppCompatActivity {
             dbController.addPlan(email, plan);
             alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             for(Object obj : plan.activity){
-                Activity adj = (Activity) obj;
                 Calendar calendar;
-                if(!adj.name.equals("footsteps")) {
+                if(obj instanceof Activity) {
+                    Activity adj = (Activity) obj;
                     long real_time = adj.start.getSeconds()-10800;
 
                     calendar = Calendar.getInstance();
