@@ -36,7 +36,7 @@ import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
 
-    private EditText mEmailText;
+   // private EditText mEmailText;
     private TextInputEditText mActivityName;
 
     private String mEmail;
@@ -108,10 +108,7 @@ public class AddActivity extends AppCompatActivity {
         activityEndDate = Calendar.getInstance();
         activityEndDate.clear();
 
-        mEmailText = findViewById(R.id.email);
-
         mActivityName = findViewById(R.id.activity_name);
-
         spinner = findViewById(R.id.sports_dropdown_menu);
         // format input and update activity name
         TextWatcher watcher = new TextWatcher() {
@@ -141,6 +138,7 @@ public class AddActivity extends AppCompatActivity {
         };
 
         mActivityName.addTextChangedListener(watcher);
+        mActivityName.setVisibility(View.INVISIBLE);
         mActivityName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,13 +153,12 @@ public class AddActivity extends AppCompatActivity {
         mStartTime = findViewById(R.id.activity_start_time);
 
         mEmail = getIntent().getStringExtra("email");
-        mEmailText.setText(mEmail);
-
         mEndTime = findViewById(R.id.activity_end_time);
 
         // set time picker layout
 
         mTimePicker = findViewById(R.id.time_picker);
+        //mTimePicker.setBackgroundResource(android.R.drawable.btn_default);
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -179,6 +176,7 @@ public class AddActivity extends AppCompatActivity {
         mTimerLayout = findViewById(R.id.timer_layout);
 
         mStartTimeBtn = findViewById(R.id.show_time_picker);
+        mStartTimeBtn.setBackgroundResource(android.R.color.transparent);
         mStartTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,6 +186,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         mEndTimeBtn = findViewById(R.id.show_time_picker_end);
+        mEndTimeBtn.setBackgroundResource(android.R.color.transparent);
         mEndTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,6 +196,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         mTimerCancel = findViewById(R.id.timer_cancel_btn);
+        mTimerCancel.setBackgroundResource(android.R.color.transparent);
         mTimerCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,6 +207,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
         mTimerSet = findViewById(R.id.timer_confirm_btn);
+        mTimerSet.setBackgroundResource(android.R.color.transparent);
         mTimerSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,6 +230,7 @@ public class AddActivity extends AppCompatActivity {
 
         mDateLayout = findViewById(R.id.date_layout);
         mDatePickerBtn = findViewById(R.id.show_date_picker);
+        mDatePickerBtn.setBackgroundResource(android.R.color.transparent);
         mDate = findViewById(R.id.activity_date);
         mDatePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,7 +255,7 @@ public class AddActivity extends AppCompatActivity {
 
         mDateCancel = findViewById(R.id.date_cancel_btn);
         mDateSet = findViewById(R.id.date_confirm_btn);
-
+        mDateSet.setBackgroundResource(android.R.color.transparent);
         mDateSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,7 +270,7 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
-
+        mDateCancel.setBackgroundResource(android.R.color.transparent);
         mDateCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,6 +280,8 @@ public class AddActivity extends AppCompatActivity {
         });
 
         mSubmit = findViewById(R.id.upload_activity);
+        mSubmit.setBackgroundResource(android.R.color.transparent);
+
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,6 +302,7 @@ public class AddActivity extends AppCompatActivity {
         });
 
         mCancel = findViewById(R.id.cancel_activity);
+        mCancel.setBackgroundResource(android.R.color.transparent);
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

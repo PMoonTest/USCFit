@@ -16,16 +16,20 @@
             android:padding="20dp"
             >
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/email"/>
+                android:id="@+id/email"
+                android:text="Sport Name"
+                android:textSize="10pt"
+                />
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/activity_name"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:hint="name of your activity" />
+                android:hint="name of your activity"
+                android:textSize="0pt" />
 
 
             <Spinner
@@ -52,7 +56,8 @@
                     android:id="@+id/show_time_picker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select Start Time"
+                    android:background="#ffffff"
+                    android:text="Start Time"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -73,9 +78,8 @@
                     android:id="@+id/show_time_picker_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select End Time"
+                    android:text="End Time"
                     android:textSize="12sp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -191,16 +195,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="submit"
-                    android:textColor="#ffffff"
-                    android:background="#2c7cff"/>
+                    android:textColor="#3a85ff"
+                    android:background="#ffffff"/>
 
                 <Button
                     android:id="@+id/cancel_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="cancel"
-                    android:textColor="#ffffff"
-                    android:background="#f41000"
+                    android:textColor="#000000"
+                    android:background="#ffffff"
                     android:layout_alignParentEnd="true"
                     />
 
