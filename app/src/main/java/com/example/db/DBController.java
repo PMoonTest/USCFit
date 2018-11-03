@@ -266,7 +266,7 @@ public class DBController {
 
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             return null;
         }
@@ -276,7 +276,7 @@ public class DBController {
 
 
     }
-    public void setPersonalInfo(String email, int height, int weight, int age){
+    public void setPersonalInfo(String email, double height, double weight, int age){
         DocumentReference userRef = db.collection("Users").document(email);
 
 

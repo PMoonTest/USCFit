@@ -3,7 +3,7 @@ package com.example;
 public class User {
     public String email;
     public String password;
-    public int weight;
-    public int height;
+    public double weight;
+    public double height;
     public int age;
 }
