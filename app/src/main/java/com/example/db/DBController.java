@@ -7,6 +7,7 @@ import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.Sport;
+import com.example.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,6 +35,7 @@ public class DBController {
     public static boolean activityComplete = false;
     public static boolean SportComplete = false;
     public static boolean PlanComplete = false;
+    public static boolean UserComplete = false;
     private static Semaphore sema = new Semaphore(2);
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
@@ -264,7 +266,7 @@ public class DBController {
 
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             return null;
         }
@@ -324,6 +326,28 @@ public class DBController {
                     }
                 });
 
+    }
+    public User getPersonalInfo(String email){
+        final User res = new User();
+        DocumentReference docRef = db.collection("Users").document(email);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                res.age = user.age;
+                res.weight = user.weight;
+                res.height = user.height;
+                res.email = user.email;
+                UserComplete = true;
+            }
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while(!UserComplete){}
+        return res;
     }
 
 }
