@@ -162,8 +162,12 @@ public class AddActivity extends AppCompatActivity {
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                String hr = String.valueOf(hourOfDay);
-                String min = String.valueOf(minute);
+                String hr;
+                if(hourOfDay <= 9) { hr = "0" + String.valueOf(hourOfDay);}
+                else {hr = String.valueOf(hourOfDay);}
+                String min;
+                if(minute <= 9){ min = "0" + String.valueOf(minute);}
+                else { min = String.valueOf(minute);}
                 String currTime = hr + ":" + min;
                 if(timeType == 0){ mStartTime.setText(currTime);}
                 else if(timeType == 1) {mEndTime.setText(currTime);}
