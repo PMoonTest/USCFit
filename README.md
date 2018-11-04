@@ -24,9 +24,9 @@ User is also able to update personal info using the "wrench" icon at top-right c
 
 User must input **all of the fields** in order to trigger an update, otherwise there will be alert box asking for complete input. 
 
-<img width="313" alt="1" src="https://user-images.githubusercontent.com/22974252/47958520-edec4c80-df89-11e8-9ce8-15f15a398e01.png">
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958529-36a40580-df8a-11e8-9dca-32f324e4d694.png">
 
-<img width="316" alt="1" src="https://user-images.githubusercontent.com/22974252/47958522-f9d80e80-df89-11e8-827f-18a376cf47f7.png">
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958549-5f2bff80-df8a-11e8-85ed-75ecc70a703f.png">
 
 
 - **Setup Instructions**
