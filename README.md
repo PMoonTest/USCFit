@@ -22,7 +22,7 @@ User is also able to update personal info using the "wrench" icon at top-right c
 
 <img width="31" alt="1" src="https://user-images.githubusercontent.com/22974252/47958510-cd23f700-df89-11e8-9cac-e672a954ff3d.png">
 
-User must input **all of the fields** in order to trigger an update, otherwise there will be alert box asking for complete input. 
+User must input **all of the fields** in order to trigger an update, otherwise there will be alert box asking for complete input. After updating the user's info and hits back, the presented user information will be automatically updated. 
 
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958529-36a40580-df8a-11e8-9dca-32f324e4d694.png">
 
