@@ -58,6 +58,39 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // repopulate user info
+        this.mUserInfo.setText("Loading...");
+        UpdateUserInfoTask task = new UpdateUserInfoTask(getIntent().getStringExtra("email"));
+        task.execute((Void) null);
+    }
+
+    public class UpdateUserInfoTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+        private String userInfoContent = "";
+
+        public UpdateUserInfoTask(String email) { this.mEmail = email; }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            User user = dbController.getPersonalInfo(mEmail);
+            String userInfo = "";
+            userInfo += "Email: " + user.email + "\n";
+            userInfo += "Age: " + Integer.toString(user.age) + "\n";
+            userInfo += "Height: " + Double.toString(user.height) + "\n";
+            userInfo += "Weight: " + Double.toString(user.weight) + "\n";
+            this.userInfoContent = userInfo;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mUserInfo.setText(this.userInfoContent);
+        }
+    }
 
     public class GetProfileTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
