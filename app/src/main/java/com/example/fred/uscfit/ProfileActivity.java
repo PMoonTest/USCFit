@@ -1,14 +1,18 @@
 package com.example.fred.uscfit;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.Activity;
 import com.example.Footstep;
 import com.example.Sport;
+import com.example.User;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
 
@@ -23,7 +27,8 @@ public class ProfileActivity extends AppCompatActivity {
     private GetProfileTask mGetProfileTask = null;
     private TextView mAllSportsText = null;
     private TextView mAllActivitiesText = null;
-    private TextView mUsername = null;
+    private TextView mUserInfo = null;
+    private ImageButton mUpdateInfoBtn = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +42,26 @@ public class ProfileActivity extends AppCompatActivity {
         this.mAllActivitiesText = (TextView) findViewById(R.id.allActivitiesText);
         this.mAllActivitiesText.setMovementMethod(new ScrollingMovementMethod());
 
-        this.mUsername = (TextView) findViewById(R.id.usernameLabel);
-        this.mUsername.setText(getIntent().getStringExtra("email"));
+        this.mUserInfo = (TextView) findViewById(R.id.userInfoLabel);
 
         this.mGetProfileTask = new GetProfileTask(getIntent().getStringExtra("email"));
         this.mGetProfileTask.execute((Void) null);
 
-
+        this.mUpdateInfoBtn = (ImageButton) findViewById(R.id.updateInfoBtn);
+        mUpdateInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, UpdateInfoActivity.class);
+                intent.putExtra("email", getIntent().getStringExtra("email"));
+                startActivity(intent);
+            }
+        });
     }
 
 
     public class GetProfileTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
+        private String userInfoContent = "";
         private String allSportsContent = "";
         private String allActivitiesContent = "";
         private HashMap<String, Integer> calorieMap = new HashMap<>();
@@ -59,6 +72,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            // populate user info
+            this.populateUserInfo();
+
             // populate all the sports
             this.populateAllSports();
 
@@ -71,8 +87,19 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mGetProfileTask = null;
+            mUserInfo.setText(this.userInfoContent);
             mAllSportsText.setText(this.allSportsContent);
             mAllActivitiesText.setText(this.allActivitiesContent);
+        }
+
+        private void populateUserInfo() {
+            User user = dbController.getPersonalInfo(mEmail);
+            String userInfo = "";
+            userInfo += "Email: " + user.email + "\n";
+            userInfo += "Age: " + Integer.toString(user.age) + "\n";
+            userInfo += "Height: " + Double.toString(user.height) + "\n";
+            userInfo += "Weight: " + Double.toString(user.weight) + "\n";
+            this.userInfoContent = userInfo;
         }
 
         private void populateAllSports() {

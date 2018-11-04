@@ -7,6 +7,28 @@
  4. Siyuan Xu (siyuanx@usc.edu)
  5. Zhixu Li (zhixul@usc.edu)
 
+- **Improvements Made Since Project 2.3**
+
+1. The first improvement task of our team for this sprint is to add a **Footstep** text field functionality when adding a plan. Here is what we've got: 
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958367-87fec580-df87-11e8-8aa3-a190590c31ba.png">
+
+The effect of this improvement would be reflected in our progress section, where the bar shown in the screenshot would show a progress in terms of the footsteps completed. 
+
+<img width="291" alt="1" src="https://user-images.githubusercontent.com/22974252/47958395-3dca1400-df88-11e8-88c1-06c413d9258b.png">
+
+2. For the second improment task, we added username, email, age, height, weight info to **Profile** page.
+User is also able to update personal info using the "wrench" icon at top-right corner of the Profile page.
+
+<img width="31" alt="1" src="https://user-images.githubusercontent.com/22974252/47958510-cd23f700-df89-11e8-9cac-e672a954ff3d.png">
+
+User must input **all of the fields** in order to trigger an update, otherwise there will be alert box asking for complete input. 
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958529-36a40580-df8a-11e8-9dca-32f324e4d694.png">
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958549-5f2bff80-df8a-11e8-85ed-75ecc70a703f.png">
+
+
 - **Setup Instructions**
 1. Follow the regular setup steps for Android Projects. 
 

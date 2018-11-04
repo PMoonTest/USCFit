@@ -22,7 +22,10 @@ import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.db.DBController;
+import com.google.common.io.LineReader;
 import com.google.firebase.Timestamp;
+
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +46,7 @@ public class ProgressActivity extends AppCompatActivity {
     private SimpleDateFormat sdf;
 
     private ConstraintLayout mConstraintLayout;
+    private LinearLayout mLinearLayout;
     private View mLoadingView;
 
     @Override
@@ -68,6 +72,7 @@ public class ProgressActivity extends AppCompatActivity {
         }
         dbController = new DBController();
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
+        mLinearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         mLoadingView = findViewById(R.id.loadingProgress);
         showProgress(true);
 
@@ -90,11 +95,11 @@ public class ProgressActivity extends AppCompatActivity {
         Calendar currCal = Calendar.getInstance();
         currCal.setTime(cal.getTime());
         currCal.add(Calendar.DAY_OF_MONTH, 1);
-        for(int i=0; i<mConstraintLayout.getChildCount(); i++) {
-            if(mConstraintLayout.getChildAt(i).getClass() != CardView.class) {
+        for(int i=0; i<mLinearLayout.getChildCount(); i++) {
+            if(mLinearLayout.getChildAt(i).getClass() != CardView.class) {
                 continue;
             }
-            CardView childCardView = (CardView) mConstraintLayout.getChildAt(i);
+            CardView childCardView = (CardView) mLinearLayout.getChildAt(i);
             LinearLayout childLinearLayout = (LinearLayout) childCardView.getChildAt(0);
             if(childLinearLayout.getChildAt(0).getClass() != ProgressBar.class) {
                 continue;
@@ -102,7 +107,8 @@ public class ProgressActivity extends AppCompatActivity {
             ProgressBar childProgressBar = (ProgressBar) childLinearLayout.getChildAt(0);
             LinearLayout childVerticalLayout = (LinearLayout) childLinearLayout.getChildAt(1);
             final ImageView childImageView = (ImageView) childVerticalLayout.getChildAt(0);
-            TextView childTextView = (TextView) childVerticalLayout.getChildAt(1);
+            final LinearLayout planDetailsLayout = (LinearLayout) childVerticalLayout.getChildAt(1);
+            TextView childTextView = (TextView) planDetailsLayout.getChildAt(0);
 
             currCal.add(Calendar.DAY_OF_MONTH, -1);
             String currDate = sdf.format(currCal.getTime());
@@ -147,7 +153,20 @@ public class ProgressActivity extends AppCompatActivity {
             boolean plancompleted = true;
             for(Object o: plan.activity) {
                 if(o.getClass() == Activity.class) {
-                    Activity plannedActivity = (Activity) o;
+                    final Activity plannedActivity = (Activity) o;
+                    // add curr plan to plandetailsLayout
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView planItemText = new TextView(ProgressActivity.this);
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+                            String startTime = timeFormat.format(plannedActivity.start.toDate());
+                            String endTime = timeFormat.format(plannedActivity.end.toDate());
+                            planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
+                            planDetailsLayout.addView(planItemText);
+                        }
+                    });
+
                     List<Activity> currActivities = myActivities.get(currDate);
                     boolean plannedActivityCompleted = false;
                     if(currActivities == null) {
