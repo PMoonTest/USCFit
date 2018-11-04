@@ -159,7 +159,10 @@ public class ProgressActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             TextView planItemText = new TextView(ProgressActivity.this);
-                            planItemText.setText("HELLP???");
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+                            String startTime = timeFormat.format(plannedActivity.start.toDate());
+                            String endTime = timeFormat.format(plannedActivity.end.toDate());
+                            planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
                             planDetailsLayout.addView(planItemText);
                         }
                     });
