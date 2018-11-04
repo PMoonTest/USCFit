@@ -89,7 +89,7 @@ public class DBController {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        System.out.println("Complete!!!!!!!!!!!!!!!!!");
+
                         SportComplete = true;
                     }
                 });
@@ -97,12 +97,11 @@ public class DBController {
             // Simulate network access.
 
 
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             return null;
         }
         while(!SportComplete){}
-        System.out.println("出来1111111111111111");
         return _sports;
 
     }
@@ -173,7 +172,7 @@ public class DBController {
             // Simulate network access.
 
 
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             return null;
         }
@@ -342,7 +341,7 @@ public class DBController {
             }
         });
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
