@@ -17,6 +17,17 @@ The effect of this improvement would be reflected in our progress section, where
 
 <img width="291" alt="1" src="https://user-images.githubusercontent.com/22974252/47958395-3dca1400-df88-11e8-88c1-06c413d9258b.png">
 
+2. For the second improment task, we added username, email, age, height, weight info to **Profile** page.
+User is also able to update personal info using the "wrench" icon at top-right corner of the Profile page.
+
+<img width="31" alt="1" src="https://user-images.githubusercontent.com/22974252/47958510-cd23f700-df89-11e8-9cac-e672a954ff3d.png">
+
+User must input **all of the fields** in order to trigger an update, otherwise there will be alert box asking for complete input. 
+
+<img width="313" alt="1" src="https://user-images.githubusercontent.com/22974252/47958520-edec4c80-df89-11e8-9ce8-15f15a398e01.png">
+
+<img width="316" alt="1" src="https://user-images.githubusercontent.com/22974252/47958522-f9d80e80-df89-11e8-827f-18a376cf47f7.png">
+
 
 - **Setup Instructions**
 1. Follow the regular setup steps for Android Projects. 
