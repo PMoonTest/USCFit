@@ -29,7 +29,7 @@ User must input **all of the fields** in order to trigger an update, otherwise t
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/47958549-5f2bff80-df8a-11e8-85ed-75ecc70a703f.png">
 
 3. We also added more detailed information to the progress page. Now the user can see all the goals in each day's plan
-<img width="350" alt="progressUpdate" src="https://user-images.githubusercontent.com/24618303/47974636-64a74980-e05f-11e8-8545-cdbafdb68d4b.png">
+<img width="354" alt="screen shot 2018-11-04 at 7 28 30 pm" src="https://user-images.githubusercontent.com/24618303/47976577-ea2ef780-e067-11e8-804b-ce564dedc6d6.png">
 
 
 - **Setup Instructions**
