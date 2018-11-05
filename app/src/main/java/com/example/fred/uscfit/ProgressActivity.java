@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -88,6 +91,7 @@ public class ProgressActivity extends AppCompatActivity {
 
 
     public void updatePlanStatus() {
+        final Map<Integer, Activity> checkBoxMap = new HashMap<>();
         SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
         final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
         boolean weeklyPlanCompleted = true;
@@ -155,35 +159,71 @@ public class ProgressActivity extends AppCompatActivity {
                 if(o.getClass() == Activity.class) {
                     final Activity plannedActivity = (Activity) o;
                     // add curr plan to plandetailsLayout
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            TextView planItemText = new TextView(ProgressActivity.this);
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-                            String startTime = timeFormat.format(plannedActivity.start.toDate());
-                            String endTime = timeFormat.format(plannedActivity.end.toDate());
-                            planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
-                            planDetailsLayout.addView(planItemText);
-                        }
-                    });
+
 
                     List<Activity> currActivities = myActivities.get(currDate);
                     boolean plannedActivityCompleted = false;
-                    if(currActivities == null) {
-                        plancompleted = false;
-                        continue;
-                    }
-                    for(Activity activity : currActivities) {
-                        if(isFinishedActivity(activity, plannedActivity)) {
-                            Log.d(TAG, "run: FINISHED PLAN");
-                            plannedActivityCompleted = true;
-                            break;
+                    if (currActivities != null) {
+                        for(Activity activity : currActivities) {
+                            if(!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
+                                Log.d(TAG, "run: FINISHED PLAN");
+                                plannedActivityCompleted = true;
+                            }
                         }
                     }
+
+                    // if the planned activity is not completed
                     if(!plannedActivityCompleted) {
                         plancompleted = false;
-                        break;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CheckBox planItemCheck = new CheckBox(ProgressActivity.this);
+                                planItemCheck.setChecked(false);
+                                int checkBoxId = View.generateViewId();
+                                checkBoxMap.put(checkBoxId, plannedActivity);
+                                Log.d(TAG, "CHECKBOX ADD: " + sdf.format(plannedActivity.start.toDate()));
+                                planItemCheck.setId(checkBoxId);
+
+                                planItemCheck.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
+
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                                        if (isChecked == true) {
+                                            Activity currActivity = checkBoxMap.get(buttonView.getId());
+                                            Log.d(TAG, "CHECKBOX GET: " + sdf.format(currActivity.start.toDate()));
+                                            dbController.addActivity(mEmail, currActivity);
+                                        }
+                                    }
+                                }
+                                ));
+//                                TextView planItemText = new TextView(ProgressActivity.this);
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("MM-dd h:mm a");
+                                String startTime = timeFormat.format(plannedActivity.start.toDate());
+                                String endTime = timeFormat.format(plannedActivity.end.toDate());
+//                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
+                                planItemCheck.setText(plannedActivity.name + " " + startTime + " - " + endTime);
+                                planDetailsLayout.addView(planItemCheck);
+                            }
+                        });
                     }
+                    else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                CheckBox planItemCheck = new CheckBox(ProgressActivity.this);
+                                planItemCheck.setChecked(true);
+//                                TextView planItemText = new TextView(ProgressActivity.this);
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("MM-dd h:mm a");
+                                String startTime = timeFormat.format(plannedActivity.start.toDate());
+                                String endTime = timeFormat.format(plannedActivity.end.toDate());
+//                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
+                                planItemCheck.setText(plannedActivity.name + " " + startTime + " - " + endTime);
+                                planDetailsLayout.addView(planItemCheck);
+                            }
+                        });
+                    }
+
                 }
             }
             if(plancompleted && footstepProgress == 100) {
