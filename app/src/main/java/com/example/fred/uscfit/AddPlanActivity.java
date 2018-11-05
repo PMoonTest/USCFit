@@ -108,7 +108,7 @@ public class AddPlanActivity extends AppCompatActivity {
                 {
                     planFootstep = new Footstep();
                     planFootstep.name = "footsteps";
-                    planFootstep.date = new Timestamp(new Date(mYear, mMonth, mDayOfMonth));
+                    planFootstep.date = new Timestamp(new Date(mYear-1900, mMonth, mDayOfMonth));
                     planFootstep.value = (long) Long.parseLong(footstepInput.getText().toString());
                 }
 
@@ -181,7 +181,8 @@ public class AddPlanActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
                         activityList.get(currIndex).start = new Timestamp(new Date(mYear, mMonth, mDayOfMonth, hourOfDay, minute));
-                        System.out.println(Integer.toString(hourOfDay) + " " + Integer.toString(minute));
+                        System.out.println("Start: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
+                        System.out.println(Integer.toString(currIndex));
                     }
                 }, mHour, mMinute, false);
                 startDate.hide();
@@ -193,6 +194,8 @@ public class AddPlanActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
                         activityList.get(currIndex).end = new Timestamp(new Date(mYear-1900, mMonth, mDayOfMonth, hourOfDay, minute));
+                        System.out.println("End: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
+                        System.out.println(Integer.toString(currIndex));
                     }
                 }, mHour, mMinute, false);
                 endDate.hide();
@@ -212,7 +215,7 @@ public class AddPlanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         System.out.println(currIndex);
-                        activityList.get(currIndex).start = new Timestamp(today.getTime());
+                        activityList.get(currIndex).start = null;
                         startDate.show();
                     }
                 });
@@ -236,7 +239,7 @@ public class AddPlanActivity extends AppCompatActivity {
                     int currIndex = index;
                     @Override
                     public void onClick(View v) {
-                        activityList.get(currIndex).start = new Timestamp(today.getTime());
+                        activityList.get(currIndex).end = null;
                         endDate.show();
                     }
                 });
@@ -285,10 +288,13 @@ public class AddPlanActivity extends AppCompatActivity {
         if(planName == null || planName.length()==0) return false;
         if(planTime == null) return false;
         for(int x=0; x<activityList.size(); x++) {
-            Activity curr = activityList.get(x);
-            if(curr.name==null || curr.name.length()==0) return false;
-            if(curr.start == null) return false;
-            if(curr.end == null) return false;
+            if(activityList.get(x) instanceof Activity)
+            {
+                Activity curr = activityList.get(x);
+                if(curr.name==null || curr.name.length()==0) return false;
+                if(curr.start == null) return false;
+                if(curr.end == null) return false;
+            }
         }
         return true;
     }

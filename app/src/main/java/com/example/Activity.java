@@ -2,7 +2,9 @@ package com.example;
 
 import com.google.firebase.Timestamp;
 
-public class Activity {
+import java.io.Serializable;
+
+public class Activity implements Serializable {
     public String name;
     public Timestamp start;
     public Timestamp end;
