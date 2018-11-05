@@ -198,7 +198,7 @@ public class ProgressActivity extends AppCompatActivity {
                                 }
                                 ));
 //                                TextView planItemText = new TextView(ProgressActivity.this);
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("MM-dd h:mm a");
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
                                 String startTime = timeFormat.format(plannedActivity.start.toDate());
                                 String endTime = timeFormat.format(plannedActivity.end.toDate());
 //                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
@@ -214,7 +214,7 @@ public class ProgressActivity extends AppCompatActivity {
                                 CheckBox planItemCheck = new CheckBox(ProgressActivity.this);
                                 planItemCheck.setChecked(true);
 //                                TextView planItemText = new TextView(ProgressActivity.this);
-                                SimpleDateFormat timeFormat = new SimpleDateFormat("MM-dd h:mm a");
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
                                 String startTime = timeFormat.format(plannedActivity.start.toDate());
                                 String endTime = timeFormat.format(plannedActivity.end.toDate());
 //                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
