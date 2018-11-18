@@ -22,6 +22,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -349,4 +351,44 @@ public class DBController {
         return res;
     }
 
+    public void updateFootStep(final String email, final Footstep fs){
+        db.collection("Users").document(email).collection("Activities")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        boolean flag = false;
+                        if (task.isSuccessful()) {
+                            //Calendar calendar = Calendar.getInstance();
+                            Date date= new Date();
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(date);
+                            int currentDate = cal.get(Calendar.DAY_OF_MONTH);
+                            int currentMonth = cal.get(Calendar.MONTH);
+                            //System.out.println("today's date:"+dt2+" "+month);
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Timestamp ts = (Timestamp)document.getData().get("date");
+                                if(ts == null) continue;
+                                Date dt= ts.toDate();
+                                //Log.d(TAG, "Error getting documents: ");
+                                //System.out.println(dt+" "+dt.getDate()+" " + dt.getMonth());
+
+
+                               // dt.compareTo(Calendar.getInstance().getTime());
+                                if(document.getData().get("name").equals("footsteps") && currentDate == dt.getDate() && currentMonth == dt.getMonth()){
+                                    DocumentReference ftRef = db.collection("Users").document(email).collection("Activities").document(document.getId());
+                                    ftRef.update("value",fs.value);
+                                    flag = true;
+                                }
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                            if(!flag){
+                                addFootStepActivity(email,fs);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 }
