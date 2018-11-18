@@ -106,12 +106,8 @@ public class ProgressCalendarActivity extends AppCompatActivity {
         // if no plan
         if (mPlan.name == null) {
             planNameText.setText("No plan for " +planName);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    badgeImageView.setVisibility(View.VISIBLE);
-                }
-            });
+            badgeImageView.setVisibility(View.GONE);
+            footstepProgressBar.setProgress(0);
             return;
         }
 
