@@ -50,6 +50,7 @@ public class AddPlanActivity extends AppCompatActivity {
     private String planName = "";
     private List<Activity> activityList = new ArrayList<Activity>();
     private Timestamp planTime = null;
+    private Date planTimeDate = new Date();
     private int index = 0;
     private Calendar today = null;
     private AlarmManager alarmMgr;
@@ -79,23 +80,27 @@ public class AddPlanActivity extends AppCompatActivity {
         // handles case when submit button is clicked
         Button submitPlanBtn = (Button) findViewById(R.id.submitBtn);
         final EditText footstepInput = (EditText) findViewById(R.id.footstepInput);
+
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.planDate);
+        datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                planTime = new Timestamp(getDateFromDatePicker(datePicker));
+                planTimeDate = getDateFromDatePicker(datePicker);
+
+                System.out.println("&&&&& " + planTimeDate.getYear() + " "+ planTimeDate.getMonth() + " "+ planTimeDate.getDate() + " &&&&&");
+            }
+        });
         submitPlanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // gets the selected plan date, plan name text field
-                final DatePicker datePicker = (DatePicker) findViewById(R.id.planDate);
                 EditText planNameInput = (EditText) findViewById(R.id.planNameInput);
                 // initializes the plan time
                 planTime = new Timestamp(getDateFromDatePicker(datePicker));
                 // selects the plan name
                 planName  = planNameInput.getText().toString();
 
-                datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        planTime = new Timestamp(getDateFromDatePicker(datePicker));
-                    }
-                });
                 // when the user input is invalid, show alert box and end here
                 if(!userInputValid())
                 {
@@ -108,7 +113,7 @@ public class AddPlanActivity extends AppCompatActivity {
                 {
                     planFootstep = new Footstep();
                     planFootstep.name = "footsteps";
-                    planFootstep.date = new Timestamp(new Date(mYear-1900, mMonth, mDayOfMonth));
+                    planFootstep.date = new Timestamp(new Date(planTimeDate.getYear(), planTimeDate.getMonth(), planTimeDate.getDate()));
                     planFootstep.value = (long) Long.parseLong(footstepInput.getText().toString());
                 }
 
@@ -180,7 +185,8 @@ public class AddPlanActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        activityList.get(currIndex).start = new Timestamp(new Date(mYear, mMonth, mDayOfMonth, hourOfDay, minute));
+                        System.out.println("***** " + planTimeDate.getYear() + " "+ planTimeDate.getMonth() + " "+ planTimeDate.getDate() + " *****");
+                        activityList.get(currIndex).start = new Timestamp(new Date(planTimeDate.getYear(), planTimeDate.getMonth(), planTimeDate.getDate(), hourOfDay, minute));
                         System.out.println("Start: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
                         System.out.println(Integer.toString(currIndex));
                     }
@@ -193,7 +199,7 @@ public class AddPlanActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        activityList.get(currIndex).end = new Timestamp(new Date(mYear-1900, mMonth, mDayOfMonth, hourOfDay, minute));
+                        activityList.get(currIndex).end = new Timestamp(new Date(planTimeDate.getYear(), planTimeDate.getMonth(), planTimeDate.getDate(), hourOfDay, minute));
                         System.out.println("End: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
                         System.out.println(Integer.toString(currIndex));
                     }
