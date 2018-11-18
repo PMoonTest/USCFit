@@ -73,7 +73,7 @@ public class DBController {
 //                    //db.addNewUser(mEmail,mPassword);
 //                    //setPersonalInfo(email,178,70,20);
 //                }
-                if(users.get(0).password == null){
+                if(users.size() != 0 && users.get(0).password == null){
                     fb = true;
                 }
 
@@ -86,7 +86,9 @@ public class DBController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("111111111111111111111111111");
         while(!fbComplete){}
+        System.out.println("22222222222222222222222222222");
         return fb;
     }
 
@@ -128,12 +130,14 @@ public class DBController {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if (document.exists()) {
+                            System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
                             login = true;
                             //Toast.makeText(ListProducts.this, document.toString(), Toast.LENGTH_SHORT).show();
                         }
                     }
+                    checkUserComplete = true;
                 }
-                checkUserComplete = true;
+
             }
         });
         try {
@@ -141,7 +145,9 @@ public class DBController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         while(!checkUserComplete){}
+        //System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
         return login;
     }
 

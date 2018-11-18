@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     public static boolean login;
     public static boolean isComplete = false;
+    public static boolean facebookComplete = false;
+    public static boolean fbUser;
     public final DBController db = new DBController();
     private boolean cancel = false;
     private static final String EMAIL = "email";
@@ -109,10 +111,27 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.v("LoginActivity Response ", response.toString());
 
                                 try {
-                                    String userEmail = object.getString("email");
-                                    if(db.checkNewUser(userEmail)){
-                                        db.addNewUser(userEmail, "");
-                                    }
+                                    final String userEmail = object.getString("email");
+//                                    if(db.checkNewUser(userEmail)){
+//                                        db.addFacebookUser(userEmail);
+//                                    }
+                                    CollectionReference usersRef = db.db.collection("Users");
+                                    Query query = usersRef.whereEqualTo("email", userEmail);
+
+                                    query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            List<User> users  = queryDocumentSnapshots.toObjects(User.class);
+
+                                            if (users.size() == 0){
+
+                                                db.addFacebookUser(userEmail);
+                                            }
+
+
+
+                                        }
+                                    });
                                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                     intent.putExtra("email", userEmail);
                                     startActivity(intent);
@@ -163,10 +182,43 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        if(db.ifFacebookUser(email)){
-            Toast.makeText(getApplicationContext(), "Please Login with Facebook!", Toast.LENGTH_LONG).show();
-            return;
-        }
+
+//        CollectionReference usersRef = db.db.collection("Users");
+//        Query query = usersRef.whereEqualTo("email", email);
+//        facebookComplete = false;
+//        fbUser = false;
+//        //isComplete = false;
+//        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                List<User> users  = queryDocumentSnapshots.toObjects(User.class);
+//
+////                if (users.size() == 0){
+////
+////                    //db.addNewUser(mEmail,mPassword);
+////                    //setPersonalInfo(email,178,70,20);
+////                }
+//                if(users.size() != 0 && users.get(0).password == null){
+//                    fbUser = true;
+//                }
+//
+//                facebookComplete = true;
+//
+//            }
+//        });
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("111111111111111111111111111");
+//        while(!facebookComplete){}
+//        System.out.println("22222222222222222222222222222");
+
+//        if(fbUser){
+//            Toast.makeText(getApplicationContext(), "Please Login with Facebook!", Toast.LENGTH_LONG).show();
+//            return;
+//        }
 
         cancel = false;
         View focusView = null;
@@ -275,6 +327,10 @@ public class LoginActivity extends AppCompatActivity {
                     if (users.size() == 0){
                         login = true;
                         db.addNewUser(mEmail,mPassword);
+                    }else if(users.get(0).password == null){
+                        login = false;
+                        //System.out.println("是null111111111111111111111");
+                        //Toast.makeText(getApplicationContext(), "Please Login with Facebook!", Toast.LENGTH_LONG).show();
                     }
                     else{
                         if(users.get(0).password.equals(mPassword)){
@@ -313,7 +369,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("email", mEmail);
                 startActivity(intent);
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("This password is incorrect OR you are a facebook user");
                 mPasswordView.requestFocus();
             }
         }
