@@ -72,7 +72,8 @@
         <activity
             android:name=".ProfileActivity"
             android:label="Profile" />
-        <activity android:name=".UpdateInfoActivity"></activity>
+        <activity android:name=".UpdateInfoActivity" />
+        <activity android:name=".ProgressCalendarActivity"></activity>
     </application>
 
 </manifest>
