@@ -72,14 +72,8 @@
         <activity
             android:name=".ProfileActivity"
             android:label="Profile" />
-        <activity android:name=".UpdateInfoActivity"></activity>
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+        <activity android:name=".UpdateInfoActivity" />
+        <activity android:name=".ProgressCalendarActivity"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>
