@@ -20,6 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.Footstep;
+import com.example.db.DBController;
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
 import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity implements SensorEventListener{
@@ -89,8 +94,17 @@ public class HomeActivity extends AppCompatActivity implements SensorEventListen
                     Button b = (Button)v;
                     String text = b.getText().toString();
                     if(text.equals(getString(R.string.footstep_btn_text))){
+
                         mStepNum = String.valueOf(Long.parseLong(mStepNum)+getRandomStep());
                         b.setText(mStepNum);
+                        Footstep ft = new Footstep();
+                        Date date= new Date();
+
+                        ft.name = "footsteps";
+                        ft.value = Long.parseLong(mStepNum);
+                        ft.date = Timestamp.now();
+                        DBController db = new DBController();
+                        db.updateFootStep(mEmail,ft);
                     }
                     else{
                         b.setText(getString(R.string.footstep_btn_text));

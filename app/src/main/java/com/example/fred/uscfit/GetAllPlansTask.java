@@ -38,6 +38,7 @@ public class GetAllPlansTask  extends AsyncTask<Void, Void, Boolean> {
         calendar.setTime(mActivity.getCalendar().getTime());
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+        // get plans
         for(int i = 0; i<7; i++) {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             String planName = sdf.format(calendar.getTime());
@@ -52,6 +53,7 @@ public class GetAllPlansTask  extends AsyncTask<Void, Void, Boolean> {
         List<Object> allActivities = dbController.getAllActivity(mEmail);
         Map<String, List<Activity>> myActivities = new HashMap<>();
         Map<String, Footstep> myFootsteps = new HashMap<>();
+        // get activities
         for(Object o: allActivities) {
             HashMap<String, Object> map = (HashMap<String, Object>) o;
             if(map.get("name").equals("footsteps")) {
