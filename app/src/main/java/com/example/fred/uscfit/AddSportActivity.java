@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.Sport;
+import com.example.User;
 import com.example.db.DBController;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public class AddSportActivity extends AppCompatActivity {
     private int calories = 0;
     private DBController dbController = null;
     private GetAllSportsTask mGetAllSportsTask = null;
+    private Button autoCalculateBtn = null;
+    private AutoCalcTask mAutoCalcTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +36,16 @@ public class AddSportActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         dbController = new DBController();
-
+        sportNameInput = (EditText) findViewById(R.id.sportNameText);
+        caloriesInput = (EditText) findViewById(R.id.caloriesText);
         addSportBtn = (Button) findViewById(R.id.addSportBtn);
+        autoCalculateBtn = (Button) findViewById(R.id.autoCalculateBtn);
+
         addSportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // check if sport name is empty
-                sportNameInput = (EditText) findViewById(R.id.sportNameText);
                 if(sportNameInput.getText().toString().length() == 0) {
                     alert("Oops...", "Please enter a sport category.");
                     return;
@@ -49,7 +54,6 @@ public class AddSportActivity extends AppCompatActivity {
                 }
 
                 // check if calories is empty
-                caloriesInput = (EditText) findViewById(R.id.caloriesText);
                 if(caloriesInput.getText().toString().length() == 0) {
                     alert("Oops...", "Please enter the calories consumption rate.");
                     return;
@@ -64,6 +68,24 @@ public class AddSportActivity extends AppCompatActivity {
                 // clear input to wait for next input
                 sportNameInput.setText("");
                 caloriesInput.setText("");
+            }
+        });
+
+        autoCalculateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // check if sport name is empty
+                if(sportNameInput.getText().toString().length() == 0) {
+                    alert("Oops...", "Please enter a sport category.");
+                    return;
+                } else {
+                    sportName = sportNameInput.getText().toString();
+                }
+
+                // start asynchronous task that is responsible for auto calculation
+                mAutoCalcTask = new AutoCalcTask(getIntent().getStringExtra("email"), sportName);
+                mAutoCalcTask.execute((Void) null);
             }
         });
 
@@ -84,7 +106,78 @@ public class AddSportActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    // generate alert box displaying auto-calculation info
+    private void alertAutoCalc(String title, double height, double weight, int age) {
 
+        // generate calculation equation string as the msg of this alert box
+        final int result = autoCalculateCalories(height, weight, age);
+        String msg = "BMR = 6.25 * height(" + Double.toString(height) + "cm)\n" +
+                "           + 10 * weight(" + Double.toString(weight) + "kg)\n" +
+                "            - 5 * age(" + Integer.toString(age) + ")\n" +
+                "          = " +
+                Integer.toString(result) +
+                " calories per hour";
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // update the calories input in the UI
+                        updateCalories(result);
+                        return;
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // calculate calories consumption rate based on user info (height, weight, age, etc)
+    private int autoCalculateCalories(double height, double weight, int age) {
+        Double result = 6.25 * height + 10 * weight - 5 * age;
+        return result.intValue();
+    }
+
+    // update the calories consumption rate
+    private void updateCalories(int calories) {
+        this.caloriesInput.setText(Integer.toString(calories));
+    }
+
+    public class AutoCalcTask extends AsyncTask<Void, Void, Boolean> {
+        private final String mEmail;
+        private final String mSportName;
+        private double height = 0.0;
+        private double weight = 0.0;
+        private int age = 0;
+
+        AutoCalcTask(String email, String sportName) {
+            mEmail = email;
+            mSportName = sportName;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            User user = dbController.getPersonalInfo(mEmail);
+            this.height = user.height;
+            this.weight = user.weight;
+            this.age = user.age;
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                alertAutoCalc("Auto-generate calories rate for " + mSportName, this.height, this.weight, this.age);
+            }
+        }
+    }
 
     public class GetAllSportsTask extends AsyncTask<Void, Void, Boolean> {
 
