@@ -2,6 +2,7 @@ package com.example.db;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.Activity;
 import com.example.Footstep;
@@ -40,7 +41,7 @@ public class DBController {
     public static boolean SportComplete = false;
     public static boolean PlanComplete = false;
     public static boolean UserComplete = false;
-    public static boolean checkUserComplete = false;
+    public static volatile boolean checkUserComplete = false;
     public static boolean login =false;
     public static boolean fb = false;
     public static boolean fbComplete = false;
@@ -59,6 +60,7 @@ public class DBController {
     public boolean ifFacebookUser(final String email){
         CollectionReference usersRef = db.collection("Users");
         Query query = usersRef.whereEqualTo("email", email);
+
         fb = false;
         //isComplete = false;
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -111,27 +113,31 @@ public class DBController {
                 });
     }
     public boolean checkNewUser(final String email){
+        //CollectionReference users = db.collection("Users");
+
+
+
+
         CollectionReference usersRef = db.collection("Users");
         Query query = usersRef.whereEqualTo("email", email);
         login = false;
         //isComplete = false;
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<User> users  = queryDocumentSnapshots.toObjects(User.class);
-
-                if (users.size() == 0){
-                    login = true;
-                    //db.addNewUser(mEmail,mPassword);
-                    //setPersonalInfo(email,178,70,20);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if (document.exists()) {
+                            login = true;
+                            //Toast.makeText(ListProducts.this, document.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-
                 checkUserComplete = true;
-
             }
         });
         try {
-            Thread.sleep(300);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -110,7 +110,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                 try {
                                     String userEmail = object.getString("email");
-                                    //db.addNewUser();
+                                    if(db.checkNewUser(userEmail)){
+                                        db.addNewUser(userEmail, "");
+                                    }
                                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                     intent.putExtra("email", userEmail);
                                     startActivity(intent);
@@ -160,6 +162,11 @@ public class LoginActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+
+        if(db.ifFacebookUser(email)){
+            Toast.makeText(getApplicationContext(), "Please Login with Facebook!", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         cancel = false;
         View focusView = null;
