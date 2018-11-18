@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.HorizontalScrollView;
@@ -51,6 +52,7 @@ public class ProgressActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private LinearLayout mLinearLayout;
     private View mLoadingView;
+    private Button mSearchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +64,9 @@ public class ProgressActivity extends AppCompatActivity {
         mEmail = intent.getStringExtra("email");
         String dateStr = intent.getStringExtra("date");
         sdf = new SimpleDateFormat("yyyy_MM_dd");
-        if(dateStr == null || dateStr.length() == 0) {
+        if (dateStr == null || dateStr.length() == 0) {
             cal = Calendar.getInstance();
-        }
-        else {
+        } else {
             try {
                 cal = Calendar.getInstance();
                 cal.setTime(sdf.parse(dateStr));
@@ -77,12 +78,20 @@ public class ProgressActivity extends AppCompatActivity {
         mConstraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayout);
         mLinearLayout = (LinearLayout) findViewById(R.id.linearLayout);
         mLoadingView = findViewById(R.id.loadingProgress);
+        mSearchButton = (Button) findViewById(R.id.searchButton);
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProgressCalendarActivity.class);
+                intent.putExtra("email", mEmail);
+                startActivity(intent);
+            }
+        });
         showProgress(true);
 
 
         GetAllPlansTask mGetAllPlansTask = new GetAllPlansTask(mEmail, this);
         mGetAllPlansTask.execute((Void) null);
-
     }
 
     public Calendar getCalendar() {
@@ -99,13 +108,13 @@ public class ProgressActivity extends AppCompatActivity {
         Calendar currCal = Calendar.getInstance();
         currCal.setTime(cal.getTime());
         currCal.add(Calendar.DAY_OF_MONTH, 1);
-        for(int i=0; i<mLinearLayout.getChildCount(); i++) {
-            if(mLinearLayout.getChildAt(i).getClass() != CardView.class) {
+        for (int i = 0; i < mLinearLayout.getChildCount(); i++) {
+            if (mLinearLayout.getChildAt(i).getClass() != CardView.class) {
                 continue;
             }
             CardView childCardView = (CardView) mLinearLayout.getChildAt(i);
             LinearLayout childLinearLayout = (LinearLayout) childCardView.getChildAt(0);
-            if(childLinearLayout.getChildAt(0).getClass() != ProgressBar.class) {
+            if (childLinearLayout.getChildAt(0).getClass() != ProgressBar.class) {
                 continue;
             }
             ProgressBar childProgressBar = (ProgressBar) childLinearLayout.getChildAt(0);
@@ -120,7 +129,7 @@ public class ProgressActivity extends AppCompatActivity {
 
             // get plan
             Plan plan = myPlans.get(currDate);
-            if(plan == null) {
+            if (plan == null) {
                 childProgressBar.setProgress(0);
                 childTextView.setText("No plan for " + outputDate);
                 runOnUiThread(new Runnable() {
@@ -135,37 +144,35 @@ public class ProgressActivity extends AppCompatActivity {
 
             // get footsteps
             long actualStep = 0;
-            if(myFootsteps.containsKey(currDate)) {
+            if (myFootsteps.containsKey(currDate)) {
                 actualStep = myFootsteps.get(currDate).value;
             }
             Footstep targetFootstep = null;
             long targetStep = actualStep;
-            for(Object o: plan.activity) {
-                if(o.getClass() == Footstep.class) {
+            for (Object o : plan.activity) {
+                if (o.getClass() == Footstep.class) {
                     targetFootstep = (Footstep) o;
                     break;
                 }
             }
-            if(targetFootstep != null) {
+            if (targetFootstep != null) {
                 targetStep = targetFootstep.value;
             }
-            double footstepProgress = (double) actualStep/targetStep * 100;
-            if(actualStep == 0 && targetStep == 0) footstepProgress = 100;
-            childProgressBar.setProgress((int)footstepProgress);
+            double footstepProgress = (double) actualStep / targetStep * 100;
+            if (actualStep == 0 && targetStep == 0) footstepProgress = 100;
+            childProgressBar.setProgress((int) footstepProgress);
 
             // get plan details
             boolean plancompleted = true;
-            for(Object o: plan.activity) {
-                if(o.getClass() == Activity.class) {
+            for (Object o : plan.activity) {
+                if (o.getClass() == Activity.class) {
                     final Activity plannedActivity = (Activity) o;
                     // add curr plan to plandetailsLayout
-
-
                     List<Activity> currActivities = myActivities.get(currDate);
                     boolean plannedActivityCompleted = false;
                     if (currActivities != null) {
-                        for(Activity activity : currActivities) {
-                            if(!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
+                        for (Activity activity : currActivities) {
+                            if (!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
                                 Log.d(TAG, "run: FINISHED PLAN");
                                 plannedActivityCompleted = true;
                             }
@@ -173,7 +180,7 @@ public class ProgressActivity extends AppCompatActivity {
                     }
 
                     // if the planned activity is not completed
-                    if(!plannedActivityCompleted) {
+                    if (!plannedActivityCompleted) {
                         plancompleted = false;
                         runOnUiThread(new Runnable() {
                             @Override
@@ -188,7 +195,7 @@ public class ProgressActivity extends AppCompatActivity {
                                 planItemCheck.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
 
                                     @Override
-                                    public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                         if (isChecked == true) {
                                             Activity currActivity = checkBoxMap.get(buttonView.getId());
                                             Log.d(TAG, "CHECKBOX GET: " + sdf.format(currActivity.start.toDate()));
@@ -206,8 +213,7 @@ public class ProgressActivity extends AppCompatActivity {
                                 planDetailsLayout.addView(planItemCheck);
                             }
                         });
-                    }
-                    else {
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -226,7 +232,7 @@ public class ProgressActivity extends AppCompatActivity {
 
                 }
             }
-            if(plancompleted && footstepProgress == 100) {
+            if (plancompleted && footstepProgress == 100) {
                 childTextView.setText(outputDate + " Completed");
                 runOnUiThread(new Runnable() {
                     @Override
@@ -242,8 +248,7 @@ public class ProgressActivity extends AppCompatActivity {
                 });
 
 
-            }
-            else {
+            } else {
                 childTextView.setText(outputDate + " Not completed");
                 runOnUiThread(new Runnable() {
                     @Override
@@ -255,7 +260,7 @@ public class ProgressActivity extends AppCompatActivity {
             }
         }
 
-        if(weeklyPlanCompleted) {
+        if (weeklyPlanCompleted) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -274,11 +279,11 @@ public class ProgressActivity extends AppCompatActivity {
 
     // return true is a fulfills plan b
     public boolean isFinishedActivity(Activity a, Activity b) {
-        if(!a.name.equals(b.name)) return false;
+        if (!a.name.equals(b.name)) return false;
 //        if a start later than b
-        if(a.start.compareTo(b.start) > 0) return false;
+        if (a.start.compareTo(b.start) > 0) return false;
 //        if a ends earlier than b
-        if(a.end.compareTo(b.end) < 0) return false;
+        if (a.end.compareTo(b.end) < 0) return false;
         return true;
     }
 
@@ -293,7 +298,6 @@ public class ProgressActivity extends AppCompatActivity {
     public void setMyFootsteps(Map<String, Footstep> myFootsteps) {
         this.myFootsteps = myFootsteps;
     }
-
 
 
     /**
