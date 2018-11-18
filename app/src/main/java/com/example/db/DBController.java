@@ -13,10 +13,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -38,6 +40,10 @@ public class DBController {
     public static boolean SportComplete = false;
     public static boolean PlanComplete = false;
     public static boolean UserComplete = false;
+    public static boolean checkUserComplete = false;
+    public static boolean login =false;
+    public static boolean fb = false;
+    public static boolean fbComplete = false;
     private static Semaphore sema = new Semaphore(2);
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
@@ -50,8 +56,90 @@ public class DBController {
         firestore.setFirestoreSettings(settings);
         db = firestore;
     }
+    public boolean ifFacebookUser(final String email){
+        CollectionReference usersRef = db.collection("Users");
+        Query query = usersRef.whereEqualTo("email", email);
+        fb = false;
+        //isComplete = false;
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<User> users  = queryDocumentSnapshots.toObjects(User.class);
 
-    public void addNewUser(String email, String password){
+//                if (users.size() == 0){
+//
+//                    //db.addNewUser(mEmail,mPassword);
+//                    //setPersonalInfo(email,178,70,20);
+//                }
+                if(users.get(0).password == null){
+                    fb = true;
+                }
+
+                fbComplete = true;
+
+            }
+        });
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while(!fbComplete){}
+        return fb;
+    }
+
+    public void addFacebookUser(final String email){
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        //newUser.put("password", password);
+
+
+        db.collection("Users").document(email)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                        setPersonalInfo(email,178,70,20);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+    public boolean checkNewUser(final String email){
+        CollectionReference usersRef = db.collection("Users");
+        Query query = usersRef.whereEqualTo("email", email);
+        login = false;
+        //isComplete = false;
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<User> users  = queryDocumentSnapshots.toObjects(User.class);
+
+                if (users.size() == 0){
+                    login = true;
+                    //db.addNewUser(mEmail,mPassword);
+                    //setPersonalInfo(email,178,70,20);
+                }
+
+                checkUserComplete = true;
+
+            }
+        });
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while(!checkUserComplete){}
+        return login;
+    }
+
+    public void addNewUser(final String email, String password){
         Map<String, Object> newUser = new HashMap<>();
         newUser.put("email", email);
         newUser.put("password", password);
@@ -63,6 +151,7 @@ public class DBController {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
+                        setPersonalInfo(email,178,70,20);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
