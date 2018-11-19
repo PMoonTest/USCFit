@@ -13,13 +13,33 @@
 
 We display the login page in the screenshot and there is a button for you to login.
 
-2. The second improvement task is in the **add sports page** that we can pre-compute a calories consumption for the user
+2. When we click on the footstep button on the **home page**, it will make a call to database so that it's updated dynamically.
+
+<img width="116" alt="1" src="https://user-images.githubusercontent.com/22974252/48727532-57559780-ebe7-11e8-8189-27f473bc3f30.png">
+
+3. The third improvement task is in the **add sports page** that we can pre-compute a calories consumption for the user
 
 <img width="342" alt="sprint2_2" src="https://user-images.githubusercontent.com/25098403/48726702-0ba1ee80-ebe5-11e8-821c-b8051dc408ae.png">
 
 <img width="342" alt="sprint2_3" src="https://user-images.githubusercontent.com/25098403/48727005-dcd84800-ebe5-11e8-9e86-792d71b15abe.png">
 
 In the screenshot, we have a button called **AUTO CALCULATE CALORIES RATE** so that you can get an option to get a calories consumption based on height, weight, and age.
+
+4. The fourth improvement task is we added a button for each planned activity displayed in the progress page and users can log the activity by clicking on the button
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/48727750-efec1780-ebe7-11e8-8cfb-2c88c250a44e.png">
+
+5. The fifth improvement task closely relates to the fourth one. We added a search page in progress page that allows user to search for the work out plan in a particular day
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/48727824-25910080-ebe8-11e8-9614-129983597c3d.png">
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/48727844-35104980-ebe8-11e8-87e9-1b8f9d12dca3.png">
+
+6. The sixth improvement task was about fixing bugs. Basically, each activity object in database has a date, and when we add the activity in AddPlanActivity, the activity date is always the current date, which should have been the whatever date set in the plan instead. 
+
+<img width="570" alt="1" src="https://user-images.githubusercontent.com/22974252/48727984-91736900-ebe8-11e8-9e3c-4ab54149f4c1.png">
+
+For example, today is 11/19, and before fixing the bug, all dates shown in the screenshoht will be 11/19, even though we've set the actual plan date as 11/17. This bug is a major one because we need to resolve this in order to implement improvement #5. 
 
 - **Improvements Made Since Project 2.4**
 
