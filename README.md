@@ -6,7 +6,7 @@
  3. Shunkai Zhang (shunkaiz@usc.edu)
  4. Siyuan Xu (siyuanx@usc.edu)
  5. Zhixu Li (zhixul@usc.edu)
-- **Improvements Made Since last sprint**
+- **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
 
 <img width="342" alt="sprint2_1" src="https://user-images.githubusercontent.com/25098403/48726576-a8b05780-ebe4-11e8-83b5-14a92adca5eb.png">
@@ -41,7 +41,7 @@ In the screenshot, we have a button called **AUTO CALCULATE CALORIES RATE** so t
 
 For example, today is 11/19, and before fixing the bug, all dates shown in the screenshoht will be 11/19, even though we've set the actual plan date as 11/17. This bug is a major one because we need to resolve this in order to implement improvement #5. 
 
-- **Improvements Made Since Project 2.4**
+- **Improvements Made Since Sprint 1**
 
 1. The first improvement task of our team for this sprint is to add a **Footstep** text field functionality when adding a plan. Here is what we've got: 
 
