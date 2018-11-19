@@ -6,8 +6,22 @@
  3. Shunkai Zhang (shunkaiz@usc.edu)
  4. Siyuan Xu (siyuanx@usc.edu)
  5. Zhixu Li (zhixul@usc.edu)
+- **Improvements Made Since last sprint**
+1. The first improvement is to add a facebook login functionality in the **login page**.
 
-- **Improvements Made Since Project 2.3**
+<img width="342" alt="sprint2_1" src="https://user-images.githubusercontent.com/25098403/48726576-a8b05780-ebe4-11e8-83b5-14a92adca5eb.png">
+
+We display the login page in the screenshot and there is a button for you to login.
+
+2. The second improvement task is in the **add sports page** that we can pre-compute a calories consumption for the user
+
+<img width="342" alt="sprint2_2" src="https://user-images.githubusercontent.com/25098403/48726702-0ba1ee80-ebe5-11e8-821c-b8051dc408ae.png">
+
+<img width="342" alt="sprint2_3" src="https://user-images.githubusercontent.com/25098403/48727005-dcd84800-ebe5-11e8-9e86-792d71b15abe.png">
+
+In the screenshot, we have a button called **AUTO CALCULATE CALORIES RATE** so that you can get an option to get a calories consumption based on height, weight, and age.
+
+- **Improvements Made Since Project 2.4**
 
 1. The first improvement task of our team for this sprint is to add a **Footstep** text field functionality when adding a plan. Here is what we've got: 
 
