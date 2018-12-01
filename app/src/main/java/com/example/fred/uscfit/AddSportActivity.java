@@ -232,7 +232,7 @@ public class AddSportActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL oracle = new URL("https://firebasestorage.googleapis.com/v0/b/uscfit-d58d6.appspot.com/o/testCalories.csv?alt=media&token=63b5c869-9597-4c01-9afa-86a548a20324");
+                    URL oracle = new URL("https://firebasestorage.googleapis.com/v0/b/uscfit-d58d6.appspot.com/o/testCalories.csv?alt=media&token=4ce731f2-694a-41cf-bbe8-312148107c89");
                     BufferedReader br = new BufferedReader(new InputStreamReader(oracle.openStream()));
                     String line;
                     DBController temp = new DBController();
