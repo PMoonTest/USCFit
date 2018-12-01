@@ -14,6 +14,10 @@ import com.example.Sport;
 import com.example.User;
 import com.example.db.DBController;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 
 public class AddSportActivity extends AppCompatActivity {
@@ -88,7 +92,6 @@ public class AddSportActivity extends AppCompatActivity {
                 mAutoCalcTask.execute((Void) null);
             }
         });
-
     }
 
     // generate alert box with customized title and message
@@ -220,5 +223,58 @@ public class AddSportActivity extends AppCompatActivity {
         }
 
     }
+
+    public static void addDefaultSports(String my_email) {
+//        TestTask testTask = new TestTask();
+//        testTask.execute((Void) null);
+        final String email = my_email;
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    URL oracle = new URL("https://firebasestorage.googleapis.com/v0/b/uscfit-d58d6.appspot.com/o/testCalories.csv?alt=media&token=63b5c869-9597-4c01-9afa-86a548a20324");
+                    BufferedReader br = new BufferedReader(new InputStreamReader(oracle.openStream()));
+                    String line;
+                    DBController temp = new DBController();
+                    while ((line = br.readLine()) != null) {
+                        String sportName = line.split(",")[0];
+                        int calories = Integer.parseInt(line.split(",")[1]);
+                        temp.addSports(email, new Sport(sportName, calories));
+                    }
+                    br.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
+    }
+
+//    public class TestTask extends AsyncTask<Void, Void, Boolean> {
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            try {
+//                URL oracle = new URL("https://firebasestorage.googleapis.com/v0/b/uscfit-d58d6.appspot.com/o/testCalories.csv?alt=media&token=63b5c869-9597-4c01-9afa-86a548a20324");
+//                BufferedReader br = new BufferedReader(new InputStreamReader(oracle.openStream()));
+//                String line;
+//                while ((line = br.readLine()) != null) {
+//                    String sportName = line.split(",")[0];
+//                    int calories = Integer.parseInt(line.split(",")[1]);
+//                    dbController.addSports(getIntent().getStringExtra("email"), new Sport(sportName, calories));
+//                }
+//                br.close();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return true;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(final Boolean success) {
+//
+//        }
+//    }
 
 }
