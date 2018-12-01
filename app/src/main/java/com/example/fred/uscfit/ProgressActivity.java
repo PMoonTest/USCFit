@@ -108,7 +108,9 @@ public class ProgressActivity extends AppCompatActivity {
         Calendar currCal = Calendar.getInstance();
         currCal.setTime(cal.getTime());
         currCal.add(Calendar.DAY_OF_MONTH, 1);
+        // get past 7 days data
         for (int i = 0; i < mLinearLayout.getChildCount(); i++) {
+            // get ui components
             if (mLinearLayout.getChildAt(i).getClass() != CardView.class) {
                 continue;
             }
@@ -143,23 +145,7 @@ public class ProgressActivity extends AppCompatActivity {
             }
 
             // get footsteps
-            long actualStep = 0;
-            if (myFootsteps.containsKey(currDate)) {
-                actualStep = myFootsteps.get(currDate).value;
-            }
-            Footstep targetFootstep = null;
-            long targetStep = actualStep;
-            for (Object o : plan.activity) {
-                if (o.getClass() == Footstep.class) {
-                    targetFootstep = (Footstep) o;
-                    break;
-                }
-            }
-            if (targetFootstep != null) {
-                targetStep = targetFootstep.value;
-            }
-            double footstepProgress = (double) actualStep / targetStep * 100;
-            if (actualStep == 0 && targetStep == 0) footstepProgress = 100;
+            double footstepProgress = getFootstepProgressVal(currDate, plan);
             childProgressBar.setProgress((int) footstepProgress);
 
             // get plan details
@@ -274,6 +260,27 @@ public class ProgressActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public double getFootstepProgressVal(String currDate, Plan plan) {
+        long actualStep = 0;
+        if (myFootsteps.containsKey(currDate)) {
+            actualStep = myFootsteps.get(currDate).value;
+        }
+        Footstep targetFootstep = null;
+        long targetStep = actualStep;
+        for (Object o : plan.activity) {
+            if (o.getClass() == Footstep.class) {
+                targetFootstep = (Footstep) o;
+                break;
+            }
+        }
+        if (targetFootstep != null) {
+            targetStep = targetFootstep.value;
+        }
+        double footstepProgress = (double) actualStep / targetStep * 100;
+        if (actualStep == 0 && targetStep == 0) footstepProgress = 100;
+        return footstepProgress;
     }
 
 
