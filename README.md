@@ -8,7 +8,7 @@
  5. Zhixu Li (zhixul@usc.edu)
 
 - **Improvements Made Since Sprint 3**
-1. 
+1. The progress page will automatically display a badge if a user finished all the planned activities
 
 - **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
