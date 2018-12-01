@@ -9,6 +9,7 @@ import com.example.Footstep;
 import com.example.Plan;
 import com.example.Sport;
 import com.example.User;
+import com.example.fred.uscfit.AddSportActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +47,7 @@ public class DBController {
     public static boolean login =false;
     public static boolean fb = false;
     public static boolean fbComplete = false;
+    public static boolean allPlan = false;
     private static Semaphore sema = new Semaphore(2);
     private List<Sport> _sports = new ArrayList<>();
     public DBController(){
@@ -164,6 +167,7 @@ public class DBController {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         setPersonalInfo(email,178,70,20);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -491,5 +495,57 @@ public class DBController {
                         }
                     }
                 });
+    }
+    public Map<String, Plan> getAllPlan(String email){
+        final Map<String,Plan> result = new HashMap<>();
+        db.collection("Users").document(email).collection("Plans")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Plan a = new Plan();
+                                a.name = (String)document.getData().get("name");
+                                a.date = (Timestamp)document.getData().get("date");
+                                List<HashMap> activity = (List<HashMap>)document.getData().get("activity");
+                                List<Object> activities = new ArrayList<>();
+                                for (int i = 0; i < activity.size();i++){
+                                   if (!activity.get(i).get("name").equals("footsteps")){
+                                       Activity ac = new Activity();
+                                       ac.start = (Timestamp) activity.get(i).get("start");
+                                       ac.name = (String) activity.get(i).get("name");
+                                       ac.end = (Timestamp) activity.get(i).get("end");
+                                       activities.add(ac);
+                                   }
+                                   else{
+                                       Footstep ft = new Footstep();
+                                       ft.date = (Timestamp) activity.get(i).get("date");
+                                       ft.value = (Long)activity.get(i).get("value");
+                                       ft.name = (String) activity.get(i).get("name");
+                                       activities.add(ft);
+                                   }
+
+                                }
+                                a.activity = activities;
+                                result.put(a.name,a);
+                                allPlan = true;
+
+                                //result.put(document.getId(),)
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (!allPlan){}
+        return result;
     }
 }
