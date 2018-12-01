@@ -22,6 +22,8 @@
 
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333322-8bc73d00-f571-11e8-808c-4fc1e945bda4.png">
 
+4. We also increase get plan response time so it can be faster.
+
 - **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
 
