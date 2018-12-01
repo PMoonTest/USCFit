@@ -511,7 +511,7 @@ public class DBController {
                                 a.name = (String)document.getData().get("name");
                                 a.date = (Timestamp)document.getData().get("date");
                                 List<HashMap> activity = (ArrayList<HashMap>)document.getData().get("activity");
-                                System.out.println("1111111111111"+activity);
+                                //System.out.println("1111111111111"+activity);
                                 List<Object> activities = new ArrayList<>();
                                 for (int i = 0; i < activity.size();i++){
                                    if (!activity.get(i).get("name").equals("footsteps")){
