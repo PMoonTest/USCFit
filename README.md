@@ -10,9 +10,11 @@
 - **Improvements Made Since Sprint 3**
 1. The progress page will automatically display a badge if a user finished all the planned activities
 
-2. We changed the background and text colors of AddPlanActivity. 
+2. We changed the background and text colors of AddPlanActivity and AddSportActivity. 
 
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333296-23785b80-f571-11e8-91fc-7f6ffdd62cdd.png">
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333379-be256a00-f572-11e8-93f8-a2925c6ea118.png">
 
 3. We also improved user experience by returning to homepage automatically after we've submitted the plan. 
 

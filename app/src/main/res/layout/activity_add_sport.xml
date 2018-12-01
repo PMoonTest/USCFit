@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#ffffff"
     tools:context=".AddSportActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -26,25 +26,26 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="auto calculate calories rate"
-            android:textSize="10sp"
+            android:text="Calculate Calories Rate"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/caloriesText"
-            app:layout_constraintVertical_bias="0.004" />
+            app:layout_constraintVertical_bias="0.191" />
 
         <TextView
             android:id="@+id/sportNameLabel"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="38dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="16dp"
             android:text="Sport Name"
+            android:textColor="#000000"
+            android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="16dp"
             android:ems="10"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,8 +71,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="28dp"
             android:text=" Calories per hour"
+            android:textColor="#000000"
+            android:textSize="25dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sportNameText" />
 
@@ -85,12 +88,13 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="numberDecimal"
+            android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/caloriesLabel"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.03" />
 
         <Button
             android:id="@+id/addSportBtn"
@@ -106,7 +110,7 @@
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/caloriesText"
-            app:layout_constraintVertical_bias="0.582" />
+            app:layout_constraintVertical_bias="0.507" />
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
