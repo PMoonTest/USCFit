@@ -510,7 +510,8 @@ public class DBController {
                                 Plan a = new Plan();
                                 a.name = (String)document.getData().get("name");
                                 a.date = (Timestamp)document.getData().get("date");
-                                List<HashMap> activity = (List<HashMap>)document.getData().get("activity");
+                                List<HashMap> activity = (ArrayList<HashMap>)document.getData().get("activity");
+                                //System.out.println("1111111111111"+activity);
                                 List<Object> activities = new ArrayList<>();
                                 for (int i = 0; i < activity.size();i++){
                                    if (!activity.get(i).get("name").equals("footsteps")){
@@ -530,7 +531,7 @@ public class DBController {
 
                                 }
                                 a.activity = activities;
-                                result.put(a.name,a);
+                                result.put(document.getId(),a);
                                 allPlan = true;
 
                                 //result.put(document.getId(),)
