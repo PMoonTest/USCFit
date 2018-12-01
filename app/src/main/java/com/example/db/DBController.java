@@ -141,7 +141,7 @@ public class DBController {
             }
         });
         try {
-            Thread.sleep(3000);
+            Thread.sleep(300);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
