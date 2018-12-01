@@ -89,9 +89,9 @@ public class DBController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("111111111111111111111111111");
+
         while(!fbComplete){}
-        System.out.println("22222222222222222222222222222");
+
         return fb;
     }
 
@@ -148,7 +148,7 @@ public class DBController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        //System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         while(!checkUserComplete){}
         //System.out.println("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
         return login;
