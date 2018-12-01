@@ -6,6 +6,10 @@
  3. Shunkai Zhang (shunkaiz@usc.edu)
  4. Siyuan Xu (siyuanx@usc.edu)
  5. Zhixu Li (zhixul@usc.edu)
+
+- **Improvements Made Since Sprint 3**
+1. 
+
 - **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
 
