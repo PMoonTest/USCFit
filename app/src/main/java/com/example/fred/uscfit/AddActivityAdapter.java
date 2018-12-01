@@ -56,6 +56,7 @@ public class AddActivityAdapter extends BaseAdapter {
 
             ImageView imageView = convertView.findViewById(R.id.sport_icon);
 
+
             if(sportName.toLowerCase().equals("running")) {
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_running));
             }
@@ -72,13 +73,16 @@ public class AddActivityAdapter extends BaseAdapter {
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_running));
             }
             else if(sportName.toLowerCase().equals("basketball")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_baseball));
+                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_basketball));
             }
             else if(sportName.toLowerCase().equals("bowling")){
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_bowling));
             }
             else if(sportName.toLowerCase().equals("cycling")){
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_cycling));
+            }
+            else if(sportName.toLowerCase().equals("baseball")){
+                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_baseball));
             }
             else{
                 imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_default));
