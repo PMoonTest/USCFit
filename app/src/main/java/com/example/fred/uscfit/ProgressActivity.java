@@ -239,18 +239,6 @@ public class ProgressActivity extends AppCompatActivity {
             }
             if (plancompleted && footstepProgress == 100) {
                 childTextView.setText(outputDate + " Completed");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ImageView newBadge = new ImageView(ProgressActivity.this);
-                        newBadge.setImageResource(R.drawable.guarantee);
-                        TableRow.LayoutParams params = new TableRow.LayoutParams();
-                        params.height = 100;
-                        params.width = 100;
-                        newBadge.setLayoutParams(params);
-                        BadgeTableRow.addView(newBadge);
-                    }
-                });
             } else {
                 childTextView.setText(outputDate + " Not completed");
                 runOnUiThread(new Runnable() {
@@ -275,6 +263,26 @@ public class ProgressActivity extends AppCompatActivity {
                     BadgeTableRow.addView(newBadge);
                 }
             });
+        }
+    }
+
+    public void displayAllBadges() {
+        final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
+        for (String date : myPlans.keySet()) {
+            if (isPlanCompleted(date)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageView newBadge = new ImageView(ProgressActivity.this);
+                        newBadge.setImageResource(R.drawable.guarantee);
+                        TableRow.LayoutParams params = new TableRow.LayoutParams();
+                        params.height = 100;
+                        params.width = 100;
+                        newBadge.setLayoutParams(params);
+                        BadgeTableRow.addView(newBadge);
+                    }
+                });
+            }
         }
     }
 
@@ -307,6 +315,31 @@ public class ProgressActivity extends AppCompatActivity {
                 // add curr plan to plandetailsLayout
                 List<Activity> currActivities = myActivities.getOrDefault(currDate, new ArrayList<Activity>());
                 currActivities.add(addedActivity);
+                boolean plannedActivityCompleted = false;
+                if (currActivities != null) {
+                    for (Activity activity : currActivities) {
+                        if (!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
+                            Log.d(TAG, "run: FINISHED PLAN");
+                            plannedActivityCompleted = true;
+                        }
+                    }
+                }
+                // if the planned activity is not completed
+                if (!plannedActivityCompleted) {
+                    return false;
+                }
+            }
+        }
+        return getFootstepProgressVal(plan, currDate) == 100;
+    }
+
+    public boolean isPlanCompleted(String currDate) {
+        Plan plan = myPlans.get(currDate);
+        for (Object o : plan.activity) {
+            if (o.getClass() == Activity.class) {
+                Activity plannedActivity = (Activity) o;
+                // add curr plan to plandetailsLayout
+                List<Activity> currActivities = myActivities.getOrDefault(currDate, new ArrayList<Activity>());
                 boolean plannedActivityCompleted = false;
                 if (currActivities != null) {
                     for (Activity activity : currActivities) {

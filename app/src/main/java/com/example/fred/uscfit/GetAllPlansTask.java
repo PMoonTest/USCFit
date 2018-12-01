@@ -39,7 +39,7 @@ public class GetAllPlansTask  extends AsyncTask<Void, Void, Boolean> {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
         // get plans
-        for(int i = 0; i<7; i++) {
+        for(int i = 0; i<30; i++) {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
             String planName = sdf.format(calendar.getTime());
             Log.d(TAG, "doInBackground: planName" + planName );
@@ -91,6 +91,7 @@ public class GetAllPlansTask  extends AsyncTask<Void, Void, Boolean> {
         mActivity.showProgress(false);
         if (success) {
             mActivity.updatePlanStatus();
+            mActivity.displayAllBadges();
             return;
         } else {
             return;
