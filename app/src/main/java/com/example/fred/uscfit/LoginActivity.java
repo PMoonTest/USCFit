@@ -318,6 +318,7 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             CollectionReference usersRef = db.db.collection("Users");
             Query query = usersRef.whereEqualTo("email", mEmail);
+            //db.getAllPlan(mEmail);
             isComplete = false;
             query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
@@ -365,6 +366,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+                AddSportActivity.addDefaultSports(mEmail);
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 intent.putExtra("email", mEmail);
                 startActivity(intent);
