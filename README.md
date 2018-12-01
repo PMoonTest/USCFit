@@ -10,6 +10,16 @@
 - **Improvements Made Since Sprint 3**
 1. The progress page will automatically display a badge if a user finished all the planned activities
 
+2. We changed the background and text colors of AddPlanActivity. 
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333296-23785b80-f571-11e8-91fc-7f6ffdd62cdd.png">
+
+3. We also improved user experience by returning to homepage automatically after we've submitted the plan. 
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333316-7f42e480-f571-11e8-914a-f72c4c5ede36.png">
+
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333322-8bc73d00-f571-11e8-808c-4fc1e945bda4.png">
+
 - **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
 
