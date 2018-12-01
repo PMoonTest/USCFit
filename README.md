@@ -14,7 +14,7 @@
 
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333296-23785b80-f571-11e8-91fc-7f6ffdd62cdd.png">
 
-<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333379-be256a00-f572-11e8-93f8-a2925c6ea118.png">
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333536-79e79900-f575-11e8-8b2f-6abc6c952436.png">
 
 3. We also improved user experience by returning to homepage automatically after we've submitted the plan. 
 
