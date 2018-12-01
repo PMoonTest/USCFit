@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,7 +65,6 @@ public class AddPlanActivity extends AppCompatActivity {
         mGetAllSports = new GetAllSports(getIntent().getStringExtra("email"));
         mGetAllSports.execute((Void) null);
         mySports = mGetAllSports.getSports();
-        System.out.println("mySports 大小第一： " + Integer.toString(mySports.size()));
         dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mySports);
 
         setContentView(R.layout.activity_add_plan);
@@ -87,8 +87,6 @@ public class AddPlanActivity extends AppCompatActivity {
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 planTime = new Timestamp(getDateFromDatePicker(datePicker));
                 planTimeDate = getDateFromDatePicker(datePicker);
-
-                System.out.println("&&&&& " + planTimeDate.getYear() + " "+ planTimeDate.getMonth() + " "+ planTimeDate.getDate() + " &&&&&");
             }
         });
         submitPlanBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +125,7 @@ public class AddPlanActivity extends AppCompatActivity {
 
                 AddPlan mAddPlan = new AddPlan(plan, getIntent().getStringExtra("email"));
                 mAddPlan.execute((Void) null);
-                showAlertWhenValid();
+                showAlertWhenValid(getIntent().getStringExtra("email"));
             }
         });
 
@@ -141,8 +139,6 @@ public class AddPlanActivity extends AppCompatActivity {
 
                 final Activity activity = new Activity();
                 activityList.add(activity);
-                System.out.println("大小： " + Integer.toString(activityList.size()));
-
                 LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayout);
                 EditText planNameInput = (EditText) findViewById(R.id.planNameInput);
 
@@ -150,11 +146,9 @@ public class AddPlanActivity extends AppCompatActivity {
                 final Spinner spinner = new Spinner(that);
                 spinner.setId(new Integer(1));
                 spinner.setAdapter(dataAdapter);
-                System.out.println("mySports 大小： " + Integer.toString(mySports.size()));
                 if(mySports.size()>0)
                 {
                     spinner.setSelection(0);
-                    System.out.println("Spinner 大小： " + Integer.toString(spinner.getSelectedItemPosition()));
                 }
 
                 // initializes the activityName
@@ -185,10 +179,7 @@ public class AddPlanActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        System.out.println("***** " + planTimeDate.getYear() + " "+ planTimeDate.getMonth() + " "+ planTimeDate.getDate() + " *****");
                         activityList.get(currIndex).start = new Timestamp(new Date(planTimeDate.getYear(), planTimeDate.getMonth(), planTimeDate.getDate(), hourOfDay, minute));
-                        System.out.println("Start: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
-                        System.out.println(Integer.toString(currIndex));
                     }
                 }, mHour, mMinute, false);
                 startDate.hide();
@@ -200,8 +191,6 @@ public class AddPlanActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
                         activityList.get(currIndex).end = new Timestamp(new Date(planTimeDate.getYear(), planTimeDate.getMonth(), planTimeDate.getDate(), hourOfDay, minute));
-                        System.out.println("End: " + Integer.toString(hourOfDay) + " " + Integer.toString(minute));
-                        System.out.println(Integer.toString(currIndex));
                     }
                 }, mHour, mMinute, false);
                 endDate.hide();
@@ -263,8 +252,6 @@ public class AddPlanActivity extends AppCompatActivity {
                 index++;
             }
         });
-
-
     }
 
     // shows alert box when the data user inputs is invalid
@@ -279,14 +266,20 @@ public class AddPlanActivity extends AppCompatActivity {
     }
 
     // shows alert box when the submission is successful
-    private void showAlertWhenValid() {
+    private void showAlertWhenValid(final String email) {
         // when the user input is invalid (when they didn't input name or something)
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Message");
         builder.setMessage("Submit Successful!");
-        builder.setPositiveButton("OK", null);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
     // returns false when the user input is invalid
     // returns true otherwise

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#ffffff"
     tools:context=".AddPlanActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -31,6 +31,7 @@
                 android:layout_height="38dp"
                 android:gravity="center_horizontal"
                 android:text="Plan Name"
+                android:textColor="#000000"
                 android:textSize="24sp" />
 
             <EditText
@@ -38,7 +39,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -46,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="Footstep"
+                android:textColor="#000000"
                 android:textSize="24sp" />
 
             <EditText
@@ -53,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/planDateLavel"
@@ -61,6 +65,7 @@
                 android:layout_height="38dp"
                 android:gravity="center_horizontal"
                 android:text="Pick Plan Date"
+                android:textColor="#000000"
                 android:textSize="24sp" />
 
             <DatePicker
@@ -68,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="96dp"
                 android:layout_gravity="center_horizontal"
+                android:calendarTextColor="#000000"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner" />
 
