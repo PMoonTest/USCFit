@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sport_name"
-    style="?android:attr/spinnerItemStyle"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:ellipsize="marquee"
-    android:singleLine="true"
-    android:textAlignment="inherit" />
+    android:orientation="horizontal"
+    >
+
+    <Space
+        android:layout_width="5dp"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sport_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        />
+
+    <Space
+        android:layout_width="10dp"
+        android:layout_height="match_parent"/>
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sport_name"
+        style="?android:attr/spinnerItemStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAlignment="inherit" />
+
+</LinearLayout>
 
