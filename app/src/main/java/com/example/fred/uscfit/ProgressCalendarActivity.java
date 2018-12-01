@@ -81,7 +81,13 @@ public class ProgressCalendarActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 month ++;
-               String planName = year + "_" + month + "_" + dayOfMonth;
+                String planName;
+                if (dayOfMonth < 10) {
+                    planName = year + "_" + month + "_0" + dayOfMonth;
+                }
+                else {
+                    planName = year + "_" + month + "_" + dayOfMonth;
+                }
                getPlanTask(planName);
             }
         });

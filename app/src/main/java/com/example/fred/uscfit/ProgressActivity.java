@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,10 +24,6 @@ import com.example.Activity;
 import com.example.Footstep;
 import com.example.Plan;
 import com.example.db.DBController;
-import com.google.common.io.LineReader;
-import com.google.firebase.Timestamp;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -101,6 +95,7 @@ public class ProgressActivity extends AppCompatActivity {
 
     public void updatePlanStatus() {
         final Map<Integer, Activity> checkBoxMap = new HashMap<>();
+        final Map<Integer, String> checkBoxDateMap = new HashMap<>();
         SimpleDateFormat outputSdf = new SimpleDateFormat("yyyy MMM.dd");
         final TableRow BadgeTableRow = (TableRow) findViewById(R.id.BadgeRow);
         boolean weeklyPlanCompleted = true;
@@ -123,11 +118,11 @@ public class ProgressActivity extends AppCompatActivity {
             LinearLayout childVerticalLayout = (LinearLayout) childLinearLayout.getChildAt(1);
             final ImageView childImageView = (ImageView) childVerticalLayout.getChildAt(0);
             final LinearLayout planDetailsLayout = (LinearLayout) childVerticalLayout.getChildAt(1);
-            TextView childTextView = (TextView) planDetailsLayout.getChildAt(0);
+            final TextView childTextView = (TextView) planDetailsLayout.getChildAt(0);
 
             currCal.add(Calendar.DAY_OF_MONTH, -1);
-            String currDate = sdf.format(currCal.getTime());
-            String outputDate = outputSdf.format(currCal.getTime());
+            final String currDate = sdf.format(currCal.getTime());
+            final String outputDate = outputSdf.format(currCal.getTime());
 
             // get plan
             Plan plan = myPlans.get(currDate);
@@ -145,7 +140,7 @@ public class ProgressActivity extends AppCompatActivity {
             }
 
             // get footsteps
-            double footstepProgress = getFootstepProgressVal(currDate, plan);
+            double footstepProgress = getFootstepProgressVal(plan, currDate);
             childProgressBar.setProgress((int) footstepProgress);
 
             // get plan details
@@ -159,7 +154,6 @@ public class ProgressActivity extends AppCompatActivity {
                     if (currActivities != null) {
                         for (Activity activity : currActivities) {
                             if (!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
-                                Log.d(TAG, "run: FINISHED PLAN");
                                 plannedActivityCompleted = true;
                             }
                         }
@@ -175,26 +169,45 @@ public class ProgressActivity extends AppCompatActivity {
                                 planItemCheck.setChecked(false);
                                 int checkBoxId = View.generateViewId();
                                 checkBoxMap.put(checkBoxId, plannedActivity);
+                                checkBoxDateMap.put(checkBoxId, currDate);
                                 Log.d(TAG, "CHECKBOX ADD: " + sdf.format(plannedActivity.start.toDate()));
                                 planItemCheck.setId(checkBoxId);
-
                                 planItemCheck.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
-
                                     @Override
                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                         if (isChecked == true) {
                                             Activity currActivity = checkBoxMap.get(buttonView.getId());
+                                            String currDate = checkBoxDateMap.get(buttonView.getId());
                                             Log.d(TAG, "CHECKBOX GET: " + sdf.format(currActivity.start.toDate()));
                                             dbController.addActivity(mEmail, currActivity);
+                                            // determine if the plan is completed
+                                            if (isPlanCompleted(currDate, currActivity)) {
+                                                Log.d(TAG, "onCheckedChanged: PLAN COMPLETED!");
+                                                // update the badge
+                                                childTextView.setText(outputDate + " Completed");
+                                                childImageView.setVisibility(View.VISIBLE);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        ImageView newBadge = new ImageView(ProgressActivity.this);
+                                                        newBadge.setImageResource(R.drawable.guarantee);
+                                                        TableRow.LayoutParams params = new TableRow.LayoutParams();
+                                                        params.height = 100;
+                                                        params.width = 100;
+                                                        newBadge.setLayoutParams(params);
+                                                        BadgeTableRow.addView(newBadge);
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            buttonView.setChecked(true);
                                         }
                                     }
                                 }
                                 ));
-//                                TextView planItemText = new TextView(ProgressActivity.this);
                                 SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
                                 String startTime = timeFormat.format(plannedActivity.start.toDate());
                                 String endTime = timeFormat.format(plannedActivity.end.toDate());
-//                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
                                 planItemCheck.setText(plannedActivity.name + " " + startTime + " - " + endTime);
                                 planDetailsLayout.addView(planItemCheck);
                             }
@@ -205,13 +218,19 @@ public class ProgressActivity extends AppCompatActivity {
                             public void run() {
                                 CheckBox planItemCheck = new CheckBox(ProgressActivity.this);
                                 planItemCheck.setChecked(true);
-//                                TextView planItemText = new TextView(ProgressActivity.this);
                                 SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
                                 String startTime = timeFormat.format(plannedActivity.start.toDate());
                                 String endTime = timeFormat.format(plannedActivity.end.toDate());
-//                                planItemText.setText(plannedActivity.name + " " + startTime + " - " + endTime);
                                 planItemCheck.setText(plannedActivity.name + " " + startTime + " - " + endTime);
                                 planDetailsLayout.addView(planItemCheck);
+
+                                planItemCheck.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        buttonView.setChecked(true);
+                                    }
+                                }
+                                ));
                             }
                         });
                     }
@@ -232,8 +251,6 @@ public class ProgressActivity extends AppCompatActivity {
                         BadgeTableRow.addView(newBadge);
                     }
                 });
-
-
             } else {
                 childTextView.setText(outputDate + " Not completed");
                 runOnUiThread(new Runnable() {
@@ -245,7 +262,6 @@ public class ProgressActivity extends AppCompatActivity {
                 weeklyPlanCompleted = false;
             }
         }
-
         if (weeklyPlanCompleted) {
             runOnUiThread(new Runnable() {
                 @Override
@@ -262,7 +278,7 @@ public class ProgressActivity extends AppCompatActivity {
         }
     }
 
-    public double getFootstepProgressVal(String currDate, Plan plan) {
+    public double getFootstepProgressVal(Plan plan, String currDate) {
         long actualStep = 0;
         if (myFootsteps.containsKey(currDate)) {
             actualStep = myFootsteps.get(currDate).value;
@@ -283,6 +299,31 @@ public class ProgressActivity extends AppCompatActivity {
         return footstepProgress;
     }
 
+    public boolean isPlanCompleted(String currDate, Activity addedActivity) {
+        Plan plan = myPlans.get(currDate);
+        for (Object o : plan.activity) {
+            if (o.getClass() == Activity.class) {
+                Activity plannedActivity = (Activity) o;
+                // add curr plan to plandetailsLayout
+                List<Activity> currActivities = myActivities.getOrDefault(currDate, new ArrayList<Activity>());
+                currActivities.add(addedActivity);
+                boolean plannedActivityCompleted = false;
+                if (currActivities != null) {
+                    for (Activity activity : currActivities) {
+                        if (!plannedActivityCompleted && isFinishedActivity(activity, plannedActivity)) {
+                            Log.d(TAG, "run: FINISHED PLAN");
+                            plannedActivityCompleted = true;
+                        }
+                    }
+                }
+                // if the planned activity is not completed
+                if (!plannedActivityCompleted) {
+                    return false;
+                }
+            }
+        }
+        return getFootstepProgressVal(plan, currDate) == 100;
+    }
 
     // return true is a fulfills plan b
     public boolean isFinishedActivity(Activity a, Activity b) {
@@ -305,7 +346,6 @@ public class ProgressActivity extends AppCompatActivity {
     public void setMyFootsteps(Map<String, Footstep> myFootsteps) {
         this.myFootsteps = myFootsteps;
     }
-
 
     /**
      * Shows the progress UI and hides the login form.
