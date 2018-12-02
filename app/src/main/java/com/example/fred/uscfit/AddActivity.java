@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.PNGMapper;
 import com.example.Sport;
 import com.example.db.DBController;
 import com.google.firebase.Timestamp;
@@ -313,6 +314,7 @@ public class AddActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("email", mEmail);
                 startActivity(intent);
+
             }
         });
 
@@ -338,6 +340,9 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
+
+        // initialize the PNG icon mapper
+        updateAllIcons();
     }
 
     private boolean validateTime(){
@@ -429,5 +434,10 @@ public class AddActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private void updateAllIcons(){
+        PNGMapper.getInstance().initPNGIcons(getApplicationContext());
+    }
+
 
 }

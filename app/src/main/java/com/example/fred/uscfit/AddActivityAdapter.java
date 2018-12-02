@@ -8,13 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.PNGMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddActivityAdapter extends BaseAdapter {
     List<String> userData;
     Context context;
-
 
     public AddActivityAdapter(Context context, List<String> userSport) {
         this.context = context;
@@ -56,36 +57,11 @@ public class AddActivityAdapter extends BaseAdapter {
 
             ImageView imageView = convertView.findViewById(R.id.sport_icon);
 
-
-            if(sportName.toLowerCase().equals("running")) {
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_running));
-            }
-            else if(sportName.toLowerCase().equals("boxing")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_boxing));
-            }
-            else if(sportName.toLowerCase().equals("soccer")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_soccer));
-            }
-            else if(sportName.toLowerCase().equals("climbing")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_climbing));
-            }
-            else if(sportName.toLowerCase().equals("running")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_running));
-            }
-            else if(sportName.toLowerCase().equals("basketball")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_basketball));
-            }
-            else if(sportName.toLowerCase().equals("bowling")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_bowling));
-            }
-            else if(sportName.toLowerCase().equals("cycling")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_cycling));
-            }
-            else if(sportName.toLowerCase().equals("baseball")){
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_baseball));
+            if(PNGMapper.getInstance().getPNGIcons(sportName.toLowerCase()) == null){
+                imageView.setImageDrawable(PNGMapper.getInstance().getPNGIcons("default"));
             }
             else{
-                imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.activity_default));
+                imageView.setImageDrawable(PNGMapper.getInstance().getPNGIcons(sportName.toLowerCase()));
             }
             return convertView;
         }
