@@ -23,6 +23,9 @@
 <img width="399" alt="1" src="https://user-images.githubusercontent.com/22974252/49333322-8bc73d00-f571-11e8-808c-4fc1e945bda4.png">
 
 4. We also increase get plan response time so it can be faster.
+<br/>
+5. We improved the UI on AddActivity page, letting user to choose from 8 sport types in the dropdown list.
+<img width="399" alt="1" src="https://user-images.githubusercontent.com/24465921/49334956-9b597c80-f597-11e8-8411-ada5195a4cc4.png">
 
 - **Improvements Made Since Sprint 2**
 1. The first improvement is to add a facebook login functionality in the **login page**.
